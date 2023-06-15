@@ -11,3 +11,4 @@ prg program executable
 lua
 os operating system
 pte plain text executable
+stf secured text file
