@@ -1,0 +1,27 @@
+local Os_state = 0--0=disabled,1=boot,2=crashhandler,3=basic
+ 
+local console_delay = 5--delay between pass events
+ 
+function loop()
+local Timer
+while true do
+    if Os_state == 1 then if shell.run("boot/boot_primary.os") == true then Os_state = 3 else Os_state = 2 end elseif Os_state == 2 then break end
+    Timer = os.setTimer(console_delay)
+    local a, b, c, d, e, f, g, h = os.pullEvent()
+    if a ~= "timer" then os.cancelTimer(Timer) end
+    if a == "application" and Os_state == 3 then
+ 
+    elseif (a == "mouse_click" or a == "mouse_drag" or a == "mouse_up") and Os_state == 3 then
+ 
+    elseif a == "key" and Os_state == 3 then
+ 
+    elseif a == "security" then
+ 
+    elseif a == "installer" then
+ 
+    end
+end
+shell.run("system/security/crashhandler.lua")
+end
+ 
+loop()
