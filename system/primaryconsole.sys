@@ -5,7 +5,7 @@ local console_delay = 5--delay between pass events
 function loop()
 local Timer
 while true do
-    if Os_state == 1 then if shell.run("boot/boot_primary.os") == true then Os_state = 3 else Os_state = 2 end elseif Os_state == 2 then break end
+    if Os_state == 1 then if shell.run("boot/boot_primary.sys") == true then Os_state = 3 else Os_state = 2 end elseif Os_state == 2 then break end
     Timer = os.setTimer(console_delay)
     local a, b, c, d, e, f, g, h = os.pullEvent()
     if a ~= "timer" then os.cancelTimer(Timer) end
