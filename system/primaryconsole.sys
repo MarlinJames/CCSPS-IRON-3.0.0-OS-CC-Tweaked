@@ -1,7 +1,7 @@
 local Os_state = 0--0=disabled,1=boot,2=crashhandler,3=basic
  
 local console_delay = 5--delay between pass events
- 
+
 function loop()
 local Timer
 while true do
@@ -12,7 +12,7 @@ while true do
     if a == "application" and Os_state == 3 then
  
     elseif (a == "mouse_click" or a == "mouse_drag" or a == "mouse_up") and Os_state == 3 then
- 
+        shell.run("os/InterfaceHandler.os","click",b,c,d)
     elseif a == "key" and Os_state == 3 then
  
     elseif a == "security" then
