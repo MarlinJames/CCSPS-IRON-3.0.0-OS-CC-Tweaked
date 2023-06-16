@@ -105,6 +105,7 @@ if E == "application" then
     Pass = true
     if a == "load" then
         Windows[#Windows+1]={b,CreateWID(),c,d,1,1,20,20}
+        Windows[#Windows][4][3] = true--if window is visible
     elseif a == "data" then
         local ET = c
         local I = #Window_Entities
@@ -203,7 +204,7 @@ local Found = false
 for i = 1, #Items do
     if x >= I and x <= I + 2 and y >= h - 2 then
         for t = 1, #Windows do
-            if Windows[t][1] == Items[i][2] then Windows[t][6] = true Found = true end
+            if Windows[t][1] == Items[i][2] then Windows[t][4] = true Found = true end
         end
         if Found == false then Found = true shell.run("os/ProgramReader.os",Items[i][2],"onCreation") end
     end
@@ -211,23 +212,21 @@ for i = 1, #Items do
 end
 if Found == false then
     for i = 1, #Windows do
-        if Windows[i][6] == true then
-            local X1, Y1, W1, H1 = Windows[i][2][1], Windows[i][2][2], Windows[i][3], Windows[i][4]
-            if Windows[i][7] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end
-            if x >= Windows[i][2][1] and x <= Windows[i][2][1] + Windows[i][3] and y >= Windows[i][2][2] + 1 and y <= Windows[i][2][2] + Windows[i][4] then
-                for c = 1, #Windows[i][5] do
-                    if Windows[i][5][c][1] == "button" and y == Windows[i][2][2] + Windows[i][5][c][5] and x >= Windows[i][2][1] + Windows[i][5][c][4] and x <= (Windows[i][2][1] + Windows[i][5][c][4]) + string.len(Windows[i][5][c][2]) then Found = true shell.run(Windows[i][5][c][3],Windows[i][5][c][2]) end
-                end
+        if Windows[i][4][3] == true then--if window is visable
+            local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
+            if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end
+            if x >= Windows[i][5] and x <= Windows[i][5] + Windows[i][7] and y >= Windows[i][6] + 1 and y <= Windows[i][6] + Windows[i][8] then
+                --checks slaved entities to see if they were clicked
             end
-            if x == (X1 + W1) - 2 and y == Y1 then Windows[i][6] = false Found = true end
+            if x == (X1 + W1) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true end --used to see if user clicked minimized button
             if x == (X1 + W1) - 1 and y == Windows[i][2][2] then
-                if Windows[i][7] == true then Windows[i][7] = false else Windows[i][7] = true end
+                if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
                 Found = true
             end
             if x == X1 + W1 and y == Y1 then Windows[i] = nil Found = true end
  
         else
-            if x >= I and x <= I + 2 and y >= h - 2 then Windows[i][6] = true Found = true end
+            if x >= I and x <= I + 2 and y >= h - 2 then Windows[i][4][2] = true Found = true end
             I = I + 5
         end
     end
@@ -241,14 +240,14 @@ if Found == false and DesktopDraw == true then
         for i2 = 1, #Windows do
             if X >= Windows[i2][5] and X <= Windows[i2][5] + Windows[i2][7] and Y >= Windows[i2][6] and Y <= Windows[i2][6] + Windows[i2][8] then Blocked = true end
         end
-        if x >= X and x <= X + 3 and y >= Y and y <= Y + 3 and Blocked == false then Found = true shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onCreation") shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onStart") end
+        if x >= X and x <= X + 3 and y >= Y and y <= Y + 3 and Blocked == false then Found = true shell.run("os/ProgramReader.os",DeskItems[i][1],"call","onCreation") shell.run("os/ProgramReader.os",DeskItems[i][1],"call","onStart") end
         if X + 8 < w then X = X + 6 else X = 2 Y = Y + 5 end
     end
 end
 Found = true
 if Found == false then
     for i = 1, #Buttons do
-        if y == Windows[Buttons[i][1]][2][2] + Buttons[i][5] and x >= Windows[Buttons[i][1]][2][1] + Buttons[i][4] and x <= Windows[Buttons[i][1]][2][1] + Buttons[i][4] + 5 then shell.run("os/ProgramReader.os","call",CA,Window_Entities[i][1],"click") end
+        --if y == Windows[Buttons[i][1]][2][2] + Buttons[i][5] and x >= Windows[Buttons[i][1]][2][1] + Buttons[i][4] and x <= Windows[Buttons[i][1]][2][1] + Buttons[i][4] + 5 then shell.run("os/ProgramReader.os","call",CA,Window_Entities[i][1],"click") end
     end
 end
 return Found
@@ -347,7 +346,7 @@ function Draw()
         if 1 == 1 then
         local X1, Y1, W1, H1 = Windows[i][5], Windows[i][7], Windows[i][6], Windows[i][8]
             if Windows[i][12] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
-            paintutils.drawFilledBox(X1,Y1,X1 + W1,Y1 + H1,colors.white)
+            paintutils.drawFilledBox(X1,Y1-1,X1 + W1,Y1 + H1,colors.white)
             paintutils.drawBox(X1,Y1,X1 + W1, Y1 + H1, colors.gray)
             paintutils.drawBox(X1,Y1,X1 + W1 - 2,Y1,colors.lightGray)
             paintutils.drawPixel(X1 + W1, Y1,colors.red)
