@@ -240,7 +240,7 @@ if Found == false and DesktopDraw == true then
         for i2 = 1, #Windows do
             if X >= Windows[i2][5] and X <= Windows[i2][5] + Windows[i2][7] and Y >= Windows[i2][6] and Y <= Windows[i2][6] + Windows[i2][8] then Blocked = true end
         end
-        if x >= X and x <= X + 3 and y >= Y and y <= Y + 3 and Blocked == false then Found = true shell.run("os/ProgramReader.os",DeskItems[i][1],"call","onCreation") shell.run("os/ProgramReader.os",DeskItems[i][1],"call","onStart") end
+        if x >= X and x <= X + 3 and y >= Y and y <= Y + 3 and Blocked == false then Found = true shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onCreation") shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onStart") end
         if X + 8 < w then X = X + 6 else X = 2 Y = Y + 5 end
     end
 end
