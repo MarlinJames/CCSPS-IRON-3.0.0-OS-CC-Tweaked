@@ -8,6 +8,7 @@ local DeskItems = {}
 local Notifications = {}
 local Buttons = {}
 local Videos = 0
+local Window_Entities = {}--(windowid).(entityid),text,path,action,w,h,wx,wy
 local Popup = {false,1,1,{},nil}
 local DesktopDraw = true
 local FullScreen = false
@@ -252,14 +253,14 @@ if Found == false and DesktopDraw == true then
         for l = 1, #Windows do
             if X >= Windows[i][2][1] and X <= Windows[i][2][1] + Windows[i][3] and Y >= Windows[i][2][2] and Y <= Windows[i][2][2] + Windows[i][4] then Blocked = true end
         end
-        if x >= X and x <= X + 3 and y >= Y and y <= Y + 3 and Blocked == false then Found = true shell.run(DeskItems[i][2],"start") end
+        if x >= X and x <= X + 3 and y >= Y and y <= Y + 3 and Blocked == false then Found = true shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onCreation") shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onStart") end
         if X + 8 < w then X = X + 6 else X = 2 Y = Y + 5 end
     end
 end
 Found = true
 if Found == false then
     for i = 1, #Buttons do
-        if y == Windows[Buttons[i][1]][2][2] + Buttons[i][5] and x >= Windows[Buttons[i][1]][2][1] + Buttons[i][4] and x <= Windows[Buttons[i][1]][2][1] + Buttons[i][4] + 5 then shell.run(Buttons[i][3],Buttons[i][2]) end
+        if y == Windows[Buttons[i][1]][2][2] + Buttons[i][5] and x >= Windows[Buttons[i][1]][2][1] + Buttons[i][4] and x <= Windows[Buttons[i][1]][2][1] + Buttons[i][4] + 5 then shell.run("os/ProgramReader.os","call",CA,Window_Entities[i][1],"click") end
     end
 end
 return Found
