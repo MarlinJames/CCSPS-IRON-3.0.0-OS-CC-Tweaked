@@ -70,7 +70,7 @@ local Path
 local Settings
 local Image
 for i = 1, #List do
-    file = fs.open(fs.compbine(ShortcutsPath,List[i]),"r")
+    file = fs.open(fs.combine(ShortcutsPath,List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
     Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
@@ -147,14 +147,10 @@ while true do
     os.startTimer(3)
     local event, a, b, c, d, e, f= os.pullEvent()
     --Pass = CheckEvent(event,a,b,c,d,e,f) disabled to switch to use prg programs
-    term.setBackgroundColor(colors.black)
     if event == "timer" and Pass == false then
-        Time()
-        if Videos > 0 then Draw() end
+        drawFrame()
     elseif Pass == true then
-        Clear()
-        if Layer[1] == true then drawDesktop() end
-        Draw()
+        --updated
     end
 end
 end
@@ -189,10 +185,6 @@ while true do
     elseif event == "mouse_drag" then
         Windows[I][3] = b - Windows[I][2][1]
         Windows[I][4] = c - Windows[I][2][2]
-        term.setBackgroundColor(colors.black)
-        Clear()
-        drawDesktop()
-        Draw()
     end
 end
 end
@@ -206,10 +198,6 @@ while true do
         break
     elseif event == "mouse_drag" then
         Windows[I][2] = {b - x2,c}
-        term.setBackgroundColor(colors.black)
-        Clear()
-        drawDesktop()
-        Draw()
         x, y = b, c
     end
 end
@@ -358,7 +346,6 @@ term.setBackgroundColor(colors.black)
 end
  
 function Draw()
-    if Layers[5] == true then DrawTaskbar() end
     term.setBackgroundColor(colors.black)
     local I = 1
     term.setTextColor(colors.black)
@@ -397,7 +384,15 @@ else
 end
 end
 
+function drawFrame()
+if Layers[1] == true then drawDesktop() end
+if Layers[3] == true then Draw() end
+if Layers[4] == true then DrawTaskbar() end
+if Layers[5] == true then DrawPopup() end
+end
+
 Layers = {true,true,true,true,true}
 GetPaths()
 GetItems()
+drawFrame()
 Event()
