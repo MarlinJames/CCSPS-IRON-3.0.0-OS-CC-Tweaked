@@ -18,16 +18,22 @@ local Layers = {false,false,false,false}--desktop,shortcuts,windows,taskbar
 local w, h = term.getSize()
  
 function GetPaths()
+local references = {{"Files"},{"User"},{"Desktop"},{"Documents"}}
 local file = fs.open("system/directory.sys","r")
 local Content
 repeat
     Content = file.readLine()
-    if Content ~= nil and string.find(Content,"Files = ") then FilePath = string.sub(Content,9,string.len(Content)) end
-    if Content ~= nil and string.find(Content,"User = ") then UserPath = string.sub(Content,8,string.len(Content)) end
-    if Content ~= nil and string.find(Content,"Desktop = ") then ShortcutsPath = string.sub(Content,12,string.len(Content)) end
-    if Content ~= nil and string.find(Content,"Documents = ") then DocumentsPath = string.sub(Content,12,string.len(Content)) end
+    if Content ~= nil then
+        for i = 1, #references do
+            if string.find(Content,references[i][1],1,string.find(Content,"=")) ~= nil then references[i][2] = string.sub(Content,string.find(Content,"=")+1,string.len(Content)) end
+        end
+    end
 until Content == nil
 file.close()
+FilePath = references[1][2]
+UserPath = references[2][2]
+ShortcutsPath = references[3][2]
+DocumentsPath = references[4][2]
 end
  
 local function Clear()
