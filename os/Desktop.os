@@ -104,7 +104,7 @@ end
 if E == "application" then
     Pass = true
     if a == "load" then
-        Windows[#Windows+1]={a,CreateWID(),b,c,1,1,20,20}
+        Windows[#Windows+1]={b,CreateWID(),c,d,1,1,20,20}
     elseif a == "data" then
         local ET = c
         local I = #Window_Entities
