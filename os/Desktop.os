@@ -75,7 +75,7 @@ for i = 1, #List do
     Path = file.readLine()
     Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
     Image = file.readLine()
-    if Name ~= nil then Items[#Items + 1] = {Name,Path,Image} end
+    if Name ~= nil then DeskItems[#DeskItems+ 1] = {Name,Path,Image} end
     file.close()
 end
 if #List < 2 then DeskItems = {} end
