@@ -11,6 +11,8 @@ local Videos = 0
 local Popup = {false,1,1,{},nil}
 local DesktopDraw = true
 local FullScreen = false
+
+local Layers = {false,false,false,false}--desktop,shortcuts,windows,taskbar
 local w, h = term.getSize()
  
 function GetPaths()
@@ -35,33 +37,39 @@ local List = fs.list("system/user/guest/documents")
 local file
 local Name
 local Path
+local Settings
 local Image
 for i = 1, #List do
     file = fs.open(fs.complete("system/user/guest/documents",List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
+    Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
     Image = file.readLine()
-    if Name ~= nil then Items[#Items + 1] = {Name,Path,Image} end
+    local SET = {textutils.unserialize(Settings)}
+    if Name ~= nil and SET[4] == true then Items[#Items + 1] = {Name,Path,Image} end
     file.close()
 end
-if #List < 2 then Items = {} end
+
 GetDesktop()
 end
  
 function GetDesktop()
-local file = fs.open("os/SystemFiles/DesktopShortcuts.txt","r")
+local List = fs.list("system/user/guest/documents")
+local file
 local Name
 local Path
+local Settings
 local Image
-repeat
+for i = 1, #List do
+    file = fs.open(fs.complete("system/user/guest/documents",List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
+    Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
     Image = file.readLine()
-    if Name ~= nil then DeskItems[#DeskItems + 1] = {Name,Path,Image} end
-until Name == nil
-file.close()
- 
-if fs.getSize("os/SystemFiles/DesktopShortcuts.txt") < 2 then DeskItems = {} end
+    if Name ~= nil then Items[#Items + 1] = {Name,Path,Image} end
+    file.close()
+end
+if #List < 2 then DeskItems = {} end
  
 end
  
@@ -129,14 +137,14 @@ while true do
     Pass = false
     os.startTimer(3)
     local event, a, b, c, d, e, f= os.pullEvent()
-    Pass = CheckEvent(event,a,b,c,d,e,f)
+    --Pass = CheckEvent(event,a,b,c,d,e,f) disabled to switch to use prg programs
     term.setBackgroundColor(colors.black)
     if event == "timer" and Pass == false then
         Time()
         if Videos > 0 then Draw() end
     elseif Pass == true then
         Clear()
-        drawDesktop()
+        if Layer[1] == true then drawDesktop() end
         Draw()
     end
 end
@@ -341,7 +349,7 @@ term.setBackgroundColor(colors.black)
 end
  
 function Draw()
-    DrawTaskbar()
+    if Layers[5] == true then DrawTaskbar() end
     term.setBackgroundColor(colors.black)
     local I = 1
     term.setTextColor(colors.black)
