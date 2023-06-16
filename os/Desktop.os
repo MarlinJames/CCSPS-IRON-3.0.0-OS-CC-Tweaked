@@ -25,7 +25,7 @@ repeat
     Content = file.readLine()
     if Content ~= nil then
         for i = 1, #references do
-            if string.find(Content,references[i][1],1,string.find(Content,"=")) ~= nil then references[i][2] = string.sub(Content,string.find(Content,"=")+1,string.len(Content)) end
+            if string.find(string.sub(Content,1,string.find(Content,"=")),references[i][1]) ~= nil then references[i][2] = string.sub(Content,string.find(Content,"=")+1,string.len(Content)) end
         end
     end
 until Content == nil
