@@ -78,7 +78,6 @@ for i = 1, #List do
     if Name ~= nil then DeskItems[#DeskItems+ 1] = {Name,Path,Image} end
     file.close()
 end
-if #List < 2 then DeskItems = {} end
  
 end
 
