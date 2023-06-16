@@ -1,6 +1,7 @@
 local FilePath
 local UserPath
-local ProgramPaths
+local ShortcutsPath
+local DocumentsPath
  
 local Windows = {}
 local Items = {}
@@ -17,13 +18,14 @@ local Layers = {false,false,false,false}--desktop,shortcuts,windows,taskbar
 local w, h = term.getSize()
  
 function GetPaths()
-local file = fs.open("os/SystemFiles/Paths.txt","r")
+local file = fs.open("system/directory.sys","r")
 local Content
 repeat
     Content = file.readLine()
     if Content ~= nil and string.find(Content,"Files = ") then FilePath = string.sub(Content,9,string.len(Content)) end
     if Content ~= nil and string.find(Content,"User = ") then UserPath = string.sub(Content,8,string.len(Content)) end
-    if Content ~= nil and string.find(Content,"Programs = ") then ProgramPaths = string.sub(Content,12,string.len(Content)) end
+    if Content ~= nil and string.find(Content,"Desktop = ") then ShortcutsPath = string.sub(Content,12,string.len(Content)) end
+    if Content ~= nil and string.find(Content,"Documents = ") then DocumentsPath = string.sub(Content,12,string.len(Content)) end
 until Content == nil
 file.close()
 end
@@ -34,14 +36,14 @@ term.setCursorPos(1,1)
 end
  
 function GetItems()
-local List = fs.list("system/user/guest/documents")
+local List = fs.list(ShortcutsPath)
 local file
 local Name
 local Path
 local Settings
 local Image
 for i = 1, #List do
-    file = fs.open(fs.complete("system/user/guest/documents",List[i]),"r")
+    file = fs.open(fs.complete(ShortcutsPath,List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
     Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
@@ -55,14 +57,14 @@ GetDesktop()
 end
  
 function GetDesktop()
-local List = fs.list("system/user/guest/documents")
+local List = fs.list(ShortcutsPath)
 local file
 local Name
 local Path
 local Settings
 local Image
 for i = 1, #List do
-    file = fs.open(fs.complete("system/user/guest/documents",List[i]),"r")
+    file = fs.open(fs.complete(ShortcutsPath,List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
     Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
@@ -388,7 +390,8 @@ else
     Windows[Window][5][Item] = nil
 end
 end
- 
+
+Layers = {true,true,true,true,true}
 GetPaths()
 GetItems()
 Event()
