@@ -81,7 +81,13 @@ end
 if #List < 2 then DeskItems = {} end
  
 end
- 
+
+function CreateWID()
+local T = 1
+if #Windows > 0 then T = Windows[#Windows][2] + 1 end
+return T
+end
+
 function OpenPopup(x,y,details)
 local Options = {}
 if details[2] == "file" then
