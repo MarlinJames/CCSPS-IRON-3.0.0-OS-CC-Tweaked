@@ -115,7 +115,7 @@ end
 function Execute()
 if arg[2] == "call" then
     for i = 1, #callbacks do
-        if arg[3] == callbacks[i][1] then os.queueEvent("application","load",arg[1],callbacks[i][2],callbacks[i][3],callbacks[i][4],callbacks[i][5]) if arg[3] == "onStart" then os.queueEvent("application","data",arg[1],entities) elseif arg[3] == "onInteraction" then runFunct(callbacks[i][3]) end end
+        if arg[3] == callbacks[i][1] then if arg[3] == "onCreation" then os.queueEvent("application","load",arg[1],callbacks[i][4],{callbacks[i][2],callbacks[i][3]}) elseif arg[3] == "onStart" then os.queueEvent("application","data",arg[1],entities) elseif arg[3] == "onInteraction" then runFunct(callbacks[i][3]) end end
     end
 end
 end
