@@ -49,7 +49,7 @@ local Path
 local Settings
 local Image
 for i = 1, #List do
-    file = fs.open(fs.complete(ShortcutsPath,List[i]),"r")
+    file = fs.open(fs.combine(ShortcutsPath,List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
     Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
@@ -70,7 +70,7 @@ local Path
 local Settings
 local Image
 for i = 1, #List do
-    file = fs.open(fs.complete(ShortcutsPath,List[i]),"r")
+    file = fs.open(fs.compbine(ShortcutsPath,List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
     Settings = file.readLine()--blank,blank,blank,pinnedtotaskbar
