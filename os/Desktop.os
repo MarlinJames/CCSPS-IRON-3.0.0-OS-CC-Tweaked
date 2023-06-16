@@ -116,15 +116,15 @@ if E == "application" then
 
     end
 elseif E == "windowFullscreen" then
-    if b == true then FullScreen = true Windows[i][6] = true end
+    if b == true then FullScreen = true Windows[i][4][2] = true end
     Pass = true
 elseif E == "windowVideoUpdate" then
-    UpdateItem(i,b,"video",c)
+    --UpdateItem(i,b,"video",c)
     Pass = true
 elseif E == "mouse_click" then
     if CheckWindows(b,c) == true then Pass = true end
 elseif E == "mouse_drag" then
-    GetDragWindow(b,c)
+    --GetDragWindow(b,c) disabled till window system is ready
     Pass = true
 elseif E == "modem_message" then
     Notifications[#Notifications + 1] = {"message",b,c,d,e}
@@ -219,7 +219,7 @@ if Found == false then
                 --checks slaved entities to see if they were clicked
             end
             if x == (X1 + W1) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true end --used to see if user clicked minimized button
-            if x == (X1 + W1) - 1 and y == Windows[i][2][2] then
+            if x == (X1 + W1) - 1 and y == Windows[i][6] then
                 if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
                 Found = true
             end
@@ -343,9 +343,9 @@ function Draw()
     term.setTextColor(colors.black)
     local Cords = {}
     for i = 1, #Windows do
-        if 1 == 1 then
+        if Windows[i][4][3] == true then
         local X1, Y1, W1, H1 = Windows[i][5], Windows[i][7], Windows[i][6], Windows[i][8]
-            if Windows[i][12] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
+            if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
             paintutils.drawFilledBox(X1,Y1-1,X1 + W1,Y1 + H1,colors.white)
             paintutils.drawBox(X1,Y1,X1 + W1, Y1 + H1, colors.gray)
             paintutils.drawBox(X1,Y1,X1 + W1 - 2,Y1,colors.lightGray)
