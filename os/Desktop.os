@@ -3,7 +3,7 @@ local UserPath
 local ShortcutsPath
 local DocumentsPath
  
-local Windows = {}
+local Windows = {}--script,id,title,settings,x,y,w,h
 local Items = {}
 local DeskItems = {}
 local Notifications = {}
@@ -96,32 +96,19 @@ Pass = false
 for j = 1, #Windows do
     if Windows[j][1] == a then i = j end
 end
-if E == "newWindow" then
-    Windows[#Windows + 1] = {a,{b,c},d,e,{},true,false,f}
+if E == "application" then
     Pass = true
-elseif E == "closeWindow" then
-    Windows[i] = nil
-    Pass = true
-elseif E == "clearWindow" then
-    Windows[i][5] = {}
-    Pass = true
-elseif E == "windowText" then
-    Windows[i][5][#Windows[i][5] + 1] = {"text",b,c,d}
-    Pass = true
-elseif E == "windowImage" then
-    Windows[i][5][#Windows[i][5] + 1] = {"image",b,c,d}
-    Pass = true
-elseif E == "windowButton" then
-    Windows[i][5][#Windows[i][5]+ 1] = {"button",b,c,d,e}
-    Pass = true 
-    Buttons[#Buttons + 1] = {i,b,c,d,e}
-elseif E == "windowInputBox" then
-    Windows[i][5][#Windows[i][5] + 1 ] = {"input",b,c,d,e,f}
-    Pass = true
-elseif E == "windowVideo" then
-    Windows[i][5][#Windows[i][5] + 1] = {"video",b,c,1,d,e}
-    Videos = Videos + 1
-    Pass = true
+    if a == "load" then
+        Windows[#Windows+1]={a,CreateWID(),b,c,1,1,w,h-2}
+    elseif a == "data" then
+        local ET = c
+        local I = #Window_Entities
+        for i = 1, #ET do
+            Window_Entities[I+i] = {}
+        end
+    elseif a == "request" then
+
+    end
 elseif E == "windowFullscreen" then
     if b == true then FullScreen = true Windows[i][6] = true end
     Pass = true
@@ -146,7 +133,7 @@ while true do
     Pass = false
     os.startTimer(3)
     local event, a, b, c, d, e, f= os.pullEvent()
-    --Pass = CheckEvent(event,a,b,c,d,e,f) disabled to switch to use prg programs
+    Pass = CheckEvent(event,a,b,c,d,e,f)
     if event == "timer" and Pass == false then
         drawFrame()
     elseif Pass == true then
