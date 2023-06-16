@@ -42,9 +42,9 @@ for i = 1, #List do
     Path = file.readLine()
     Image = file.readLine()
     if Name ~= nil then Items[#Items + 1] = {Name,Path,Image} end
-until Name == nil
-file.close()
-if fs.getSize("os/SystemFiles/TaskbarShortcuts.txt") < 2 then Items = {} end
+    file.close()
+end
+if #List < 2 then Items = {} end
 GetDesktop()
 end
  
