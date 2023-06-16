@@ -31,11 +31,13 @@ term.setCursorPos(1,1)
 end
  
 function GetItems()
-local file = fs.open("os/SystemFiles/TaskbarShortcuts.txt","r")
+local List = fs.list("system/user/guest/documents")
+local file
 local Name
 local Path
 local Image
-repeat
+for i = 1, #List do
+    file = fs.open(fs.complete("system/user/guest/documents",List[i]),"r")
     Name = file.readLine()
     Path = file.readLine()
     Image = file.readLine()
@@ -125,7 +127,7 @@ function Event()
 local Pass = false
 while true do
     Pass = false
-    os.startTimer(1)
+    os.startTimer(3)
     local event, a, b, c, d, e, f= os.pullEvent()
     Pass = CheckEvent(event,a,b,c,d,e,f)
     term.setBackgroundColor(colors.black)
@@ -376,12 +378,6 @@ else
     if Windows[Window][8] ~= nil then shell.run(Windows[Window][8],Windows[Window][5][Item][2]) end
     Windows[Window][5][Item] = nil
 end
-end
- 
-function Time()
-term.setBackgroundColor(colors.lightBlue)
-term.setCursorPos(w - 7, h - 1)
-term.write(textutils.formatTime(os.time()))
 end
  
 GetPaths()
