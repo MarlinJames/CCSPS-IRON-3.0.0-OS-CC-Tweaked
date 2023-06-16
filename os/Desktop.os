@@ -213,7 +213,7 @@ for i = 1, #Items do
         for t = 1, #Windows do
             if Windows[t][1] == Items[i][1] then Windows[t][6] = true Found = true end
         end
-        if Found == false then Found = true shell.run(Items[i][2],"start") end
+        if Found == false then Found = true shell.run("os/ProgramReader.os",Items[i][2],"onCreation") end
     end
     I = I + 5
 end
@@ -385,6 +385,8 @@ end
 end
 
 function drawFrame()
+local a, b = term.getSize()
+if a ~= w or b ~= h then Clear() end
 if Layers[1] == true then drawDesktop() end
 if Layers[3] == true then Draw() end
 if Layers[4] == true then DrawTaskbar() end
@@ -392,6 +394,7 @@ if Layers[5] == true then DrawPopup() end
 end
 
 Layers = {true,true,true,true,true}
+Clear()
 GetPaths()
 GetItems()
 drawFrame()
