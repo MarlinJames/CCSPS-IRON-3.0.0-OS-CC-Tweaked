@@ -323,6 +323,7 @@ end
 end
  
 function drawDesktop()
+paintutils.drawFilledBox(1,1,w,h-2,colors.black)
 DesktopDraw = true
 for i = 1, #Windows do
     if Windows[i][7] == true and Windows[i][6] == true then DesktopDraw = false end
