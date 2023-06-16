@@ -344,9 +344,9 @@ function Draw()
     term.setTextColor(colors.black)
     local Cords = {}
     for i = 1, #Windows do
-        if Windows[i][6] == true then
-        local X1, Y1, W1, H1 = Windows[i][2][1], Windows[i][2][2], Windows[i][3], Windows[i][4]
-            if Windows[i][7] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end
+        if 1 == 1 then
+        local X1, Y1, W1, H1 = Windows[i][5], Windows[i][7], Windows[i][6], Windows[i][8]
+            if Windows[i][12] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
             paintutils.drawFilledBox(X1,Y1,X1 + W1,Y1 + H1,colors.white)
             paintutils.drawBox(X1,Y1,X1 + W1, Y1 + H1, colors.gray)
             paintutils.drawBox(X1,Y1,X1 + W1 - 2,Y1,colors.lightGray)
@@ -355,11 +355,8 @@ function Draw()
             paintutils.drawPixel((X1 + W1) - 1, Y1, colors.yellow)
             term.setCursorPos(X1,Y1)
             term.setBackgroundColor(colors.lightGray)
-            term.write(string.sub(Windows[i][1],1,Windows[i][3] - 5))
+            term.write(Windows[i][3])
             term.setBackgroundColor(colors.white)
-            for t = 1, #Windows[i][5] do
-                if Windows[i][5][t][1] == "text" then term.setCursorPos(X1 + Windows[i][5][t][3], Y1 + Windows[i][5][t][4]) term.write(string.sub(Windows[i][5][t][2],1,Windows[i][3] - Windows[i][5][t][3])) elseif Windows[i][5][t][1] == "image" then local Image = paintutils.loadImage(Windows[i][5][t][2]) paintutils.drawImage(Image,X1 + Windows[i][5][t][3], Y1 + Windows[i][5][t][4]) elseif Windows[i][5][t][1] == "button" then term.setBackgroundColor(colors.red) term.setCursorPos(X1 + Windows[i][5][t][4], Y1 + Windows[i][5][t][5]) term.write(string.sub(Windows[i][5][t][2],1,Windows[i][3] - Windows[i][5][t][4])) elseif Windows[i][5][t][1] == "video" then VideoPlayer(i,t) end
-            end
         end
     end
 end
