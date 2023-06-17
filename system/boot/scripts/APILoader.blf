@@ -1,0 +1,15 @@
+--loads all api listed in first file found with label 'apilist.txt'
+local path = fs.combine(fs.getDir(fs.find("apilist.txt")),"apilist.txt")
+
+local file = fs.open(path,"r")
+
+local Table = textutils.unserialize(file.readAll())
+for i = 1, #Table do
+    os.load(Table[i][1])
+    shell.setAlias(Table[i][2],Table[i][1])
+end
+
+file.close()
+
+Graphics.Boot()
+Graphics.UpdateScreen()
