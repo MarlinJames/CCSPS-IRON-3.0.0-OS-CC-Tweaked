@@ -140,7 +140,7 @@ end
 W.close()
 end
 
-function fillColor(old,new)
+function fillColor(l,old,new)
 
 end
 
