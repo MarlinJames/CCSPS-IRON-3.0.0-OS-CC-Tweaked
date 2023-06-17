@@ -12,3 +12,4 @@ lua
 os operating system
 pte plain text executable
 stf secured text file
+blf boot load file - can not be messed by anyone, including users with admin priviliages, ground work for future major updates/changes.
