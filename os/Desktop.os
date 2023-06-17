@@ -350,10 +350,10 @@ function drawWindows()
         if Windows[i][4][3] == true then
         local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
             if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
-            paintutils.drawFilledBox(X1,Y1+1,X1 + W1,Y1 + H1,colors.white)
-            paintutils.drawBox(X1,Y1,X1 + W1, Y1 + H1, colors.gray)
+            Graphics.drawBox(X1,Y1+1,X1 + W1,Y1 + H1,3,0)
+            Graphics.drawBox(X1,Y1,X1 + W1, Y1 + H1,3, b)
             paintutils.drawBox(X1,Y1,X1 + W1 - 2,Y1,colors.lightGray)
-            paintutils.drawPixel(X1 + W1, Y1,colors.red)
+            Graphics.editPixel(X1 + W1, Y1,3,a)
             paintutils.drawPixel((X1 + W1) - 2, Y1, colors.blue)
             paintutils.drawPixel((X1 + W1) - 1, Y1, colors.yellow)
             term.setCursorPos(X1,Y1)
@@ -385,10 +385,24 @@ if Layers[2] == true then drawShortcuts() end
 if Layers[3] == true then drawWindows() end
 if Layers[4] == true then drawTaskbar() end
 if Layers[5] == true then if Popup[1] == true then DrawPopup() end end
+Graphics.UpdateScreen()
 end
 
+function DesktopStart()
+Graphics.boot()
+Graphics.createLayer(2,"color")
+Graphics.createLayer(3,"color")
+Graphics.createLayer(4,"color")
+Graphics.createLayer(5,"color")
+Graphics.createLayer(2,"text")
+Graphics.createLayer(3,"text")
+Graphics.createLayer(4,"text")
+Graphics.createLayer(5,"text")
+end
+
+
 Layers = {true,true,true,true,true}
-Clear()
+DesktopStart()
 GetPaths()
 GetItems()
 drawFrame()
