@@ -125,7 +125,7 @@ elseif E == "windowVideoUpdate" then
 elseif E == "mouse_click" then
     if CheckWindows(b,c) == true then Pass = true end
 elseif E == "mouse_drag" then
-    --GetDragWindow(b,c) disabled till window system is ready
+    GetDragWindow(b,c)
     Pass = true
 elseif E == "modem_message" then
     Notifications[#Notifications + 1] = {"message",b,c,d,e}
