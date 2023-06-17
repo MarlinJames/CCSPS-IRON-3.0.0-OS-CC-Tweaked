@@ -2,5 +2,7 @@ local Path = fs.getDir(fs.find("intialStart.blf"))
 local List = fs.list(Path)
 
 for i = 1, #List do
-    shell.run(fs.combine(Path,List))
+    if List[i] ~= "intialStart.blf" then shell.run(fs.combine(Path,List)) end
 end
+
+shell.run(fs.combine(Path,"intialStart.blf"))
