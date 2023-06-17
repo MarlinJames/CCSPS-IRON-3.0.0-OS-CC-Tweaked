@@ -345,11 +345,11 @@ function drawWindows()
     local Cords = {}
     for i = 1, #Windows do
         if Windows[i][4][3] == true then
-        local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
+            local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
             if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
-            Graphics.drawBox(X1,Y1+1,W1,H1,3,0)
+            Graphics.drawBox(X1,Y1+1,W1,H1,3,"0")
             --removed gray window outline
-            Graphics.drawLine(X1,Y1,W1,0,3,8)
+            Graphics.drawLine(X1,Y1,W1,1,3,"8")
             --need to replace minimize,resize, and close buttons
             Graphics.addText(X1,Y1,3,Windows[i][3])
         end
