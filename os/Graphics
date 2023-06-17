@@ -75,7 +75,7 @@ tFile.close()
 end
 
 function editPixel(x,y,l,color)
-local Path = "os/files/Display_L"..l..".nfp"
+local Path = ("os/files/Display_L"..l..".nfp")
 local R = fs.open(Path,"r")
 local line
 local LINES = {}
@@ -105,7 +105,7 @@ local file = fs.open("os/files/layers/Display_L1.nfp","w")
 local x = 1
 local Line = ""
 for i = 1, w*h do
-    Line = Line + "0"
+    Line = Line.."0"
     if x == w then x = 1 file.writeLine(Line) Line = "" else x = x + 1 end
 end
 file.close()
