@@ -74,8 +74,18 @@ file.close()
 tFile.close()
 end
 
-function editPixel(x,y,color)
-
+function editPixel(x,y,l,color)
+local Path = "os/files/Display_L"..l..".nfp"
+local R = fs.open(Path,"r")
+local line
+local LINES = {}
+repeat
+    line = R.readLine()
+    if line ~= nil then LINES[#LINES + 1] = line end
+until line == nil
+R.close()
+local W = fs.open(Path,"w")
+LINES[y] = 
 end
 
 function fillColor(old,new)
