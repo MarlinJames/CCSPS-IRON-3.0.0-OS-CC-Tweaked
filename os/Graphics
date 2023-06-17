@@ -1,4 +1,6 @@
-local w, h = settings.get("system.dimensions")
+local SystemDi = textutils.unserialize(settings.get("system.dimensions"))
+
+local w, h = SystemDi[1], SystemDi[2]
 
 local function CombineLayers_D()
 local Doc = fs.open("os/files/Display_M.nfp","w")
@@ -50,7 +52,7 @@ local CL = {{"0",colors.white},{"1",colors.orange},{"2",colors.magenta},{"3",col
 for i = 1, #CL do
     if K == CL[i][1] then C = CL[i][2] end
 end
-if C == nil then C == colors.black end
+if C == nil then C = colors.black end
 return C
 end
 
@@ -80,11 +82,11 @@ repeat
     term.setBackgroundColor(Color)
     if UT == true and Char ~= " " then if Color == 0 then term.setTextColor(colors.black) else term.setTextColor(colors.white) end term.write(Char) else term. setTextColor(Color) term.write(0) end
     byte = byte + 1
-    if x == w then x = 1 y = y + 1 Line = file.readLine() if UT == true then Text = tFile.readLine() end else x = x + 1 end
-until byte >= tByte
+    if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() if UT == true then Text = tFile.readLine() end else x = x + 1 end
+until y == h+1
 
 file.close()
-tFile.close()
+if UT == true then tFile.close() end
 end
 
 function editPixel(x,y,l,color)
