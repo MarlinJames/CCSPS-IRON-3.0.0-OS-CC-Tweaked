@@ -1,8 +1,27 @@
 local w, h = term.getSize()
 
 local function CombineLayers()
-
+local Doc = fs.open("os/files/Display_M.nfp","w")
+local LINES = {}
+for i = 1, 5 do
+    local file = fs.open("os/files/Display_L"..i..".nfp","r")
+    local Line
+    for y = 1, h do
+        Line = file.readLine()
+        local STR =""
+        for x = 1, w do
+            if string.sub(Line,x) ~= " " then STR = STR + string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
+        end
+        LINES[y] = STR
+    end
+    file.close()
 end
+for i = 1, #LINES do
+    Doc.writeLine(LINES[i])
+end
+Doc.close()
+end
+
 function DrawScreen()
 
 end
