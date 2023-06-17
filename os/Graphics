@@ -30,19 +30,20 @@ local LINES = {}
 for i = 1, #fs.list("os/files/textLayers") do
     local file = fs.open("os/files/textLayers/Display_T"..i..".txt","r")
     local layer = -1
-    if fs.exists("os/files/layers/Display_L"..(i+1)..".nfp") then layer = fs.open("os/files/layers/Display_L"..(i+1)..".nfp","r") else layer = -1 end
+    local UT = false
+    if fs.exists("os/files/layers/Display_L"..(i+1)..".nfp") then layer = fs.open("os/files/layers/Display_L"..(i+1)..".nfp","r") UT = true else UT = false end
     local Line
     for y = 1, h do
         Line = file.readLine()
         local STR =""
         local LC
-        if layer ~= -1 then LC = layer.readLine() end
+        if UT = true then LC = layer.readLine() end
         for x = 1, w do
-            if (layer == -1 or (layer ~= -1 and string.sub(LC,x,x) == "%s")) and string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            if UT == true and string.sub(layer,x,x) ~= "%s" then STR=STR.." " else if string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end end
         end
         LINES[y] = STR
     end
-    if layer ~= -1 then layer.close() end
+    if UT == true then layer.close() end
     file.close()
 end
 for i = 1, #LINES do
