@@ -1,10 +1,32 @@
 local w, h = term.getSize()
 
-local function CombineLayers()
+local function CombineLayers_D()
 local Doc = fs.open("os/files/Display_M.nfp","w")
 local LINES = {}
 for i = 1, 5 do
     local file = fs.open("os/files/Display_L"..i..".nfp","r")
+    local Line
+    for y = 1, h do
+        Line = file.readLine()
+        local STR =""
+        for x = 1, w do
+            if string.sub(Line,x) ~= " " then STR = STR + string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
+        end
+        LINES[y] = STR
+    end
+    file.close()
+end
+for i = 1, #LINES do
+    Doc.writeLine(LINES[i])
+end
+Doc.close()
+end
+
+local function CombineLayers_T()
+local Doc = fs.open("os/files/Display_textM.nfp","w")
+local LINES = {}
+for i = 1, 4 do
+    local file = fs.open("os/files/Display_T"..i..".txt","r")
     local Line
     for y = 1, h do
         Line = file.readLine()
@@ -27,7 +49,7 @@ function DrawScreen()
 end
 
 function UpdateScreen()
-CombineLayers()
+CombineLayers_D()
 local x = 1
 local y = 1
 local tByte = fs.getSize("os/files/Display_M.nfp")
