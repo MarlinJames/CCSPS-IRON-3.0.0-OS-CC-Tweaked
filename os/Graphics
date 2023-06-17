@@ -68,14 +68,14 @@ repeat
     if Char ~= " " then if Color == 0 then term.setTextColor(colors.black) else term.setTextColor(colors.white) end term.write(Char) else term. setTextColor(Color) term.write(0) end
     byte = byte + 1
     if x == w then x = 1 y = y + 1 Line = file.readLine Text = tFile.readLine() else x = x + 1 end
-until byte => tByte
+until byte >= tByte
 
 file.close()
 tFile.close()
 end
 
 function editPixel(x,y,l,color)
-local Path = ("os/files/Display_L"..l..".nfp")
+local Path = ("os/files/layers/Display_L"..l..".nfp")
 local R = fs.open(Path,"r")
 local line
 local LINES = {}
@@ -98,7 +98,7 @@ end
 
 function boot()
 for i = 1, #fs.list("os/files/layers") do
-    local T = "os/files/layers/Display_L"..i..".nfp")
+    local T = ("os/files/layers/Display_L"..i..".nfp")
     if fs.exists(T) then fs.delete(T) end
 end
 local file = fs.open("os/files/layers/Display_L1.nfp","w")
@@ -106,7 +106,7 @@ local x = 1
 local Line = ""
 for i = 1, w*h do
     Line = Line.."0"
-    if x == w then x = 1 file.writeLine(Line) Line = "" else x = x + 1 end
+    if x == w then x = 1 file.writeLine(tostring(Line)) Line = "" else x = x + 1 end
 end
 file.close()
 end
