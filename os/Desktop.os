@@ -137,13 +137,13 @@ function Event()
 local Pass = false
 while true do
     Pass = false
-    os.startTimer(3)
+    os.startTimer(5)
     local event, a, b, c, d, e, f= os.pullEvent()
     Pass = CheckEvent(event,a,b,c,d,e,f)
     if event == "timer" and Pass == false then
-        drawFrame()
+        
     elseif Pass == true then
-        --updated
+        drawFrame()
     end
 end
 end
@@ -346,7 +346,7 @@ function DrawWindows()
         if Windows[i][4][3] == true then
         local X1, Y1, W1, H1 = Windows[i][5], Windows[i][7], Windows[i][6], Windows[i][8]
             if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
-            paintutils.drawFilledBox(X1,Y1-1,X1 + W1,Y1 + H1,colors.white)
+            paintutils.drawFilledBox(X1,Y1+1,X1 + W1,Y1 + H1,colors.white)
             paintutils.drawBox(X1,Y1,X1 + W1, Y1 + H1, colors.gray)
             paintutils.drawBox(X1,Y1,X1 + W1 - 2,Y1,colors.lightGray)
             paintutils.drawPixel(X1 + W1, Y1,colors.red)
