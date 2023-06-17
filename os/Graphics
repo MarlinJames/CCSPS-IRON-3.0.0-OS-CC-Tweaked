@@ -182,7 +182,7 @@ repeat
 until line == nil
 R.close()
 local Doc = fs.open(Path,"w")
-for i = 1, (W-1)*(H-1) do
+for i = 1, W*H do
     LINES[y] = string.sub(LINES[y],1,x-1)..c..string.sub(LINES[y],x+1,string.len(LINES[y]))
     if x == X+(W-1) then y = y + 1 x = X else x = x + 1 end
 end
