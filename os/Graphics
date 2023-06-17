@@ -12,7 +12,7 @@ for i = 1, #fs.list("os/files/layers") do
         Line = file.readLine()
         local STR =""
         for x = 1, w do
-            if string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            if string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
@@ -39,7 +39,7 @@ for i = 1, #fs.list("os/files/textLayers") do
         local LC
         if UT == true then LC = layer.readLine() end
         for x = 1, w do
-            if UT == true and string.sub(LC,x,x) ~= "%s" then STR=STR.." " else if string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end end
+            if UT == true and string.sub(LC,x,x) ~= " " then STR=STR.." " else if string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end end
         end
         LINES[y] = STR
     end
