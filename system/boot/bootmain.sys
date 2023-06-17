@@ -1,0 +1,6 @@
+local Path = fs.getDir(fs.find("intialStart.blf"))
+local List = fs.list(Path)
+
+for i = 1, #List do
+    shell.run(fs.combine(Path,List))
+end
