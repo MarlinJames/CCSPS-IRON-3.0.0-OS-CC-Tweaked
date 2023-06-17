@@ -144,14 +144,14 @@ function fillColor(old,new)
 
 end
 
-function CreateLayer(l,type)--will create new layer file full of spaces
+function CreateLayer(l,type,fill)--will create new layer file full of spaces
 local path
 local file
 if type == "text" then path = ("os/files/textLayers/Display_T"..l..".txt") elseif type == "color" then path = ("os/files/layers/Display_L"..l..".nfp") end
 file = fs.open(path,"w")
 
 for i = 1, h do
-    file.writeLine(string.rep(" ",w))
+    if fill ~= nil then file.writeLine(string.rep(fill,w)) else file.writeLine(string.rep(" ",w)) end
 end
 file.close()
 end
@@ -161,7 +161,7 @@ for i = 1, #fs.list("os/files/layers") do
     local T = ("os/files/layers/Display_L"..i..".nfp")
     if fs.exists(T) then fs.delete(T) end
 end
-CreateLayer(1,"color")
+CreateLayer(1,"color",f)
 fs.delete("os/files/Display_M.nfp")
 fs.delete("os/files/Display_textM.txt")
 end
