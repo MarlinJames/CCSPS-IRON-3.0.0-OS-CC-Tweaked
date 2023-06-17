@@ -10,7 +10,7 @@ for i = 1, #fs.list("os/files/layers") do
         Line = file.readLine()
         local STR =""
         for x = 1, w do
-            if string.sub(Line,x) ~= " " then STR = STR + string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
+            if string.sub(Line,x) ~= " " then STR = STR..string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
         end
         LINES[y] = STR
     end
@@ -55,19 +55,22 @@ local y = 1
 local tByte = fs.getSize("os/files/Display_M.nfp")
 local byte = 1
 local file = fs.open("os/files/Display_M.nfp","r")
-local tFile = fs.open("os/files/Display_textM.txt","r")
+local TPath = "os/files/Display_textM.txt"
+local tFile = fs.open(TPath,"r")
 local Line = file.readLine()
-local Text = tFile.readLine()
+local Text 
+local UT = false
+if fs.exists(TPath) then Text = tFile.readLine() UT = true end
 local Color = colors.black
 local Char = " "
 repeat
     Color = string.sub(Line,x)
-    Char = string.sub(Text,x)
+    if UT == true then Char = string.sub(Text,x) end
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
-    if Char ~= " " then if Color == 0 then term.setTextColor(colors.black) else term.setTextColor(colors.white) end term.write(Char) else term. setTextColor(Color) term.write(0) end
+    if UT == true and Char ~= " " then if Color == 0 then term.setTextColor(colors.black) else term.setTextColor(colors.white) end term.write(Char) else term. setTextColor(Color) term.write(0) end
     byte = byte + 1
-    if x == w then x = 1 y = y + 1 Line = file.readLine Text = tFile.readLine() else x = x + 1 end
+    if x == w then x = 1 y = y + 1 Line = file.readLine if UT == true then Text = tFile.readLine() end else x = x + 1 end
 until byte >= tByte
 
 file.close()
@@ -109,4 +112,6 @@ for i = 1, w*h do
     if x == w then x = 1 file.writeLine(tostring(Line)) Line = "" else x = x + 1 end
 end
 file.close()
+fs.delete("os/files/Display_M.nfp")
+fs.delete("os/files/Display_textM.txt")
 end
