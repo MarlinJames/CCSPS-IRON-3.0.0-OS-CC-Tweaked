@@ -1,4 +1,4 @@
-function console() shell.run("system/console.sys") end
+function console() shell.run("system/primary_console.sys") end
 
 function os() shell.run("os/Desktop.os") end
 
