@@ -205,6 +205,18 @@ end
 file.close()
 end
 
+function clearLayer(l,type)--will create new layer file full of spaces
+local path
+local file
+if type == "text" then path = ("os/files/textLayers/Display_T"..l..".txt") elseif type == "color" then path = ("os/files/layers/Display_L"..l..".nfp") end
+file = fs.open(path,"w")
+
+for i = 1, h do
+    file.writeLine(string.rep(" ",w))
+end
+file.close()
+end
+
 function boot()
 for i = 1, #fs.list("os/files/layers") do
     local T = ("os/files/layers/Display_L"..i..".nfp")
