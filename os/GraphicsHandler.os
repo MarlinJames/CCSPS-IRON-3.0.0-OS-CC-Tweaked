@@ -3,18 +3,16 @@ local w, h = term.getSize()
 local function CombineLayers_D()
 local Doc = fs.open("os/files/Display_M.nfp","w")
 local LINES = {}
-for i = 1, 5 do
-    if fs.exists("os/files/Display_L"..i..".nfp") then
-        local file = fs.open("os/files/Display_L"..i..".nfp","r")
-        local Line
-        for y = 1, h do
-            Line = file.readLine()
-            local STR =""
-            for x = 1, w do
-                if string.sub(Line,x) ~= " " then STR = STR + string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
-            end
-            LINES[y] = STR
+for i = 1, #fs.list("os/files/layers") do
+    local file = fs.open("os/files/Display_L"..i..".nfp","r")
+    local Line
+    for y = 1, h do
+        Line = file.readLine()
+        local STR =""
+        for x = 1, w do
+            if string.sub(Line,x) ~= " " then STR = STR + string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
         end
+        LINES[y] = STR
     end
     file.close()
 end
@@ -85,11 +83,11 @@ function fillColor(old,new)
 end
 
 function boot()
-for i = 2, 4 do
-    local T = "os/files/Display_L"..i..".nfp")
+for i = 1, #fs.list("os/files/layers") do
+    local T = "os/files/layers/Display_L"..i..".nfp")
     if fs.exists(T) then fs.delete(T) end
 end
-local file = fs.open("os/files/Display_L1.nfp","w")
+local file = fs.open("os/files/layers/Display_L1.nfp","w")
 local x = 1
 local Line = ""
 for i = 1, w*h do
