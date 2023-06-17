@@ -12,7 +12,7 @@ for i = 1, #fs.list("os/files/layers") do
         Line = file.readLine()
         local STR =""
         for x = 1, w do
-            if string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            if string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
@@ -38,7 +38,7 @@ for i = 1, #fs.list("os/files/textLayers") do
         local LC
         if layer ~= -1 then LC = layer.readLine() end
         for x = 1, w do
-            if (layer == -1 or (layer ~= -1 and string.sub(LC,x,x) == " ")) and string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            if (layer == -1 or (layer ~= -1 and string.sub(LC,x,x) == "%s")) and string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
@@ -96,7 +96,7 @@ repeat
     if UT == true then Char = string.sub(Text,x,x) end
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
-    if UT == true and Char ~= " " then term.setTextColor(getReadableTextColor(string.sub(Line,x,x))) term.write(Char) else term. setTextColor(Color) term.write(0) end
+    if UT == true and Char ~= "%s" then term.setTextColor(getReadableTextColor(string.sub(Line,x,x))) term.write(Char) else term. setTextColor(Color) term.write(0) end
     byte = byte + 1
     if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() if UT == true then Text = tFile.readLine() end else x = x + 1 end
 until y == h+1
