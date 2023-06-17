@@ -163,6 +163,7 @@ for i = 1, le do
     elseif dir == 1 then--vertical
         y = y + 1
     end
+end
 for i = 1, #LINES do
     W.writeLine(LINES[i])
 end
