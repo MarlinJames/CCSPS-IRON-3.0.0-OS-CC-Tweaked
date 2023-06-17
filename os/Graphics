@@ -192,7 +192,7 @@ end
 Doc.close()
 end
 
-function CreateLayer(l,type,fill)--will create new layer file full of spaces
+function createLayer(l,type,fill)--will create new layer file full of spaces
 local path
 local file
 if type == "text" then path = ("os/files/textLayers/Display_T"..l..".txt") elseif type == "color" then path = ("os/files/layers/Display_L"..l..".nfp") end
@@ -209,7 +209,7 @@ for i = 1, #fs.list("os/files/layers") do
     local T = ("os/files/layers/Display_L"..i..".nfp")
     if fs.exists(T) then fs.delete(T) end
 end
-CreateLayer(1,"color","f")
+createLayer(1,"color","f")
 fs.delete("os/files/Display_M.nfp")
 fs.delete("os/files/Display_textM.txt")
 end
