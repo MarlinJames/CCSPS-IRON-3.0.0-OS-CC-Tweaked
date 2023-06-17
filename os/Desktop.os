@@ -285,12 +285,12 @@ end
  
 function drawTaskbar()
 if FullScreen == false then
-paintutils.drawFilledBox(1,h-1,w,h-1,colors.gray)
-paintutils.drawFilledBox(1,h,w,h,colors.lightGray)
+Graphics.drawBox(1,h-1,w,1,4,7)
+Graphics.drawBox(1,h,w,1,4,8)
 local x = 3
 local Tabs = {}
 for i = 1, #Items do
-    paintutils.drawFilledBox(x, h -2, x + 2, h, colors.white)
+    Graphics.drawBox(x, h -2, 2, 3,4, 0)
     Tabs[i] = 0
     x = x + 5
 end
@@ -334,32 +334,24 @@ if DesktopDraw == true then
 local y = 2
 local x = 2
 for i = 1, #DeskItems do
-    paintutils.drawFilledBox(x,y,x + 3, y + 3, colors.blue)
+    Graphics.drawBox(x,y,3,3,3,9)
     if x + 8 < w then x = x + 6 else x = 2 y = y + 5 end
 end
 end
-term.setBackgroundColor(colors.black)
 end
  
 function drawWindows()
-    term.setBackgroundColor(colors.black)
     local I = 1
-    term.setTextColor(colors.black)
     local Cords = {}
     for i = 1, #Windows do
         if Windows[i][4][3] == true then
         local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
             if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
-            Graphics.drawBox(X1,Y1+1,X1 + W1,Y1 + H1,3,0)
-            Graphics.drawBox(X1,Y1,X1 + W1, Y1 + H1,3, b)
-            paintutils.drawBox(X1,Y1,X1 + W1 - 2,Y1,colors.lightGray)
-            Graphics.editPixel(X1 + W1, Y1,3,a)
-            paintutils.drawPixel((X1 + W1) - 2, Y1, colors.blue)
-            paintutils.drawPixel((X1 + W1) - 1, Y1, colors.yellow)
-            term.setCursorPos(X1,Y1)
-            term.setBackgroundColor(colors.lightGray)
-            term.write(Windows[i][3])
-            term.setBackgroundColor(colors.white)
+            Graphics.drawBox(X1,Y1+1,W1,H1,3,0)
+            --removed gray window outline
+            Graphics.drawLine(X1,Y1,W1,0,3,8)
+            --need to replace minimize,resize, and close buttons
+            Graphics.addText(X1,Y1,3,Windows[i][3])
         end
     end
 end
