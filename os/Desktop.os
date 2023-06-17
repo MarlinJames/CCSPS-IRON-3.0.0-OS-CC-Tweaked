@@ -144,7 +144,7 @@ while true do
     if event == "timer" and Pass == false then
         CheckPopup()
     elseif Pass == true then
-        drawFrame()
+
     end
 end
 end
@@ -252,6 +252,7 @@ if Found == false then
         --if y == Windows[Buttons[i][1]][2][2] + Buttons[i][5] and x >= Windows[Buttons[i][1]][2][1] + Buttons[i][4] and x <= Windows[Buttons[i][1]][2][1] + Buttons[i][4] + 5 then shell.run("os/ProgramReader.os","call",CA,Window_Entities[i][1],"click") end
     end
 end
+if Found == true then drawFrame() end
 return Found
 end
  
@@ -322,7 +323,7 @@ end
 end
  
 function drawDesktop()
-Graphics.drawBox(1,1,w,h,1,"f")
+
 end
 
 function drawShortcuts()
@@ -331,6 +332,7 @@ for i = 1, #Windows do
     if Windows[i][4][3] == true and Windows[i][4][2] == true then DesktopDraw = false end
 end
 if DesktopDraw == true then
+Graphics.clearLayer(2,"color")
 local y = 2
 local x = 2
 for i = 1, #DeskItems do
@@ -341,6 +343,8 @@ end
 end
  
 function drawWindows()
+    Graphics.clearLayer(3,"color")
+    Graphics.clearLayer(3,"text")
     local I = 1
     local Cords = {}
     for i = 1, #Windows do
@@ -370,10 +374,6 @@ end
 end
 
 function drawFrame()
-local a, b = term.getSize()
-if a ~= w or b ~= h then Clear() end
-if Layers[1] == true and DesktopDraw == true then drawDesktop() end
-if Layers[2] == true then drawShortcuts() end
 if Layers[3] == true then drawWindows() end
 if Layers[4] == true then drawTaskbar() end
 if Layers[5] == true then if Popup[1] == true then DrawPopup() end end
@@ -397,5 +397,6 @@ Layers = {true,true,true,true,true}
 DesktopStart()
 GetPaths()
 GetItems()
+drawShortcuts()
 drawFrame()
 Event()
