@@ -141,7 +141,7 @@ while true do
     local event, a, b, c, d, e, f= os.pullEvent()
     Pass = CheckEvent(event,a,b,c,d,e,f)
     if event == "timer" and Pass == false then
-        
+        CheckPopup()
     elseif Pass == true then
         drawFrame()
     end
@@ -164,8 +164,8 @@ function GetDragWindow(x,y)
  
 local I = 1
 for i = 1, #Windows do
-    if Windows[i][6] == true and Windows[i][7] == false then
-        if x >= Windows[i][2][1] + 1 and x < (Windows[i][2][1] + Windows[i][3]) - 2 and y == Windows[i][2][2] then DragWindow(i,x,y) elseif y == Windows[i][2][2] + Windows[i][4] and x == Windows[i][2][1] + Windows[i][3] then ResizeWindow(i) end
+    if Windows[i][4][3] == true and Windows[i][4][2] == false then
+        if x >= Windows[i][5] + 1 and x < (Windows[i][5] + Windows[i][7]) - 2 and y == Windows[i][6] then DragWindow(i,x,y) elseif y == Windows[i][6] + Windows[i][8] and x == Windows[i][5] + Windows[i][7] then ResizeWindow(i) end
     end
 end
 end
@@ -176,30 +176,30 @@ while true do
     if event == "mouse_up" then
         break
     elseif event == "mouse_drag" then
-        Windows[I][3] = b - Windows[I][2][1]
-        Windows[I][4] = c - Windows[I][2][2]
+        Windows[I][7] = b - Windows[I][5]
+        Windows[I][8] = c - Windows[I][7]
     end
 end
 end
  
 function DragWindow(I,x1,y1)
 local x, y
-local x2 = x1 - Windows[I][2][1]
+local x2 = x1 - Windows[I][5]
 while true do
     local event, a, b, c = os.pullEvent()
     if event == "mouse_up" then
         break
     elseif event == "mouse_drag" then
-        Windows[I][2] = {b - x2,c}
+        Windows[I][5], Windows[I][6] = b - x2,c
         x, y = b, c
     end
 end
-if x == Windows[I][2][1] + Windows[I][3] and y == Windows[I][2][2] then Windows[I] = nil end
+if x == Windows[I][5] + Windows[I][7] and y == Windows[I][6] then Windows[I] = nil end
 end
  
 function CheckWindows(x,y)--need to update Window Interaction Variables
 local I = 3
- 
+--need to redo Items\/
 local Found = false
 for i = 1, #Items do
     if x >= I and x <= I + 2 and y >= h - 2 then
@@ -210,6 +210,7 @@ for i = 1, #Items do
     end
     I = I + 5
 end
+--Redo this /\
 if Found == false then
     for i = 1, #Windows do
         if Windows[i][4][3] == true then--if window is visable
@@ -253,7 +254,7 @@ end
 return Found
 end
  
-function DrawPopup()
+function drawPopup()
 term.setBackgroundColor(colors.white)
 term.setCursorPos(Popup[2],Popup[3])
 for i = 1, #Popup[4] do
@@ -282,7 +283,7 @@ end
 return R
 end
  
-function DrawTaskbar()
+function drawTaskbar()
 if FullScreen == false then
 paintutils.drawFilledBox(1,h-1,w,h-1,colors.gray)
 paintutils.drawFilledBox(1,h,w,h,colors.lightGray)
@@ -296,7 +297,7 @@ end
 local Found = false
 for i = 1, #Windows do
     Found = false
-    if Windows[i][6] == false then
+    if Windows[i][4][3] == false then
         for I = 1, #Items do
             if Windows[i][1] == Items[I][1] then Tabs[I] = Tabs[I] + 1 Found = true end
         end
@@ -322,9 +323,12 @@ end
  
 function drawDesktop()
 paintutils.drawFilledBox(1,1,w,h-2,colors.black)
+end
+
+function drawShortcuts()
 DesktopDraw = true
 for i = 1, #Windows do
-    if Windows[i][7] == true and Windows[i][6] == true then DesktopDraw = false end
+    if Windows[i][4][3] == true and Windows[i][4][2] == true then DesktopDraw = false end
 end
 if DesktopDraw == true then
 local y = 2
@@ -337,7 +341,7 @@ end
 term.setBackgroundColor(colors.black)
 end
  
-function DrawWindows()
+function drawWindows()
     term.setBackgroundColor(colors.black)
     local I = 1
     term.setTextColor(colors.black)
@@ -376,9 +380,10 @@ end
 function drawFrame()
 local a, b = term.getSize()
 if a ~= w or b ~= h then Clear() end
-if Layers[1] == true then drawDesktop() end
-if Layers[3] == true then DrawWindows() end
-if Layers[4] == true then DrawTaskbar() end
+if Layers[1] == true and DesktopDraw == true then drawDesktop() end
+if Layers[2] == true then drawShortcuts() end
+if Layers[3] == true then drawWindows() end
+if Layers[4] == true then drawTaskbar() end
 if Layers[5] == true then if Popup[1] == true then DrawPopup() end end
 end
 
