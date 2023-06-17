@@ -157,7 +157,7 @@ repeat
 until line == nil
 R.close()
 local W = fs.open(Path,"w")
-for i = 1, le-1 do
+for i = 1, le do
     LINES[y] = string.sub(LINES[y],1,x-1)..c..string.sub(LINES[y],x+1,string.len(LINES[y]))
     if dir == 0 then--horizontal
         x = x + 1
