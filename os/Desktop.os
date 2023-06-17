@@ -344,7 +344,7 @@ function DrawWindows()
     local Cords = {}
     for i = 1, #Windows do
         if Windows[i][4][3] == true then
-        local X1, Y1, W1, H1 = Windows[i][5], Windows[i][7], Windows[i][6], Windows[i][8]
+        local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
             if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
             paintutils.drawFilledBox(X1,Y1+1,X1 + W1,Y1 + H1,colors.white)
             paintutils.drawBox(X1,Y1,X1 + W1, Y1 + H1, colors.gray)
@@ -356,7 +356,6 @@ function DrawWindows()
             term.setBackgroundColor(colors.lightGray)
             term.write(Windows[i][3])
             term.setBackgroundColor(colors.white)
-            print(textutils.serialize({X1,Y1,W1,H1}))
         end
     end
 end
