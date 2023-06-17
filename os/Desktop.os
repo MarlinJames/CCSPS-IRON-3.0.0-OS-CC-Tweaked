@@ -379,7 +379,7 @@ if a ~= w or b ~= h then Clear() end
 if Layers[1] == true then drawDesktop() end
 if Layers[3] == true then DrawWindows() end
 if Layers[4] == true then DrawTaskbar() end
-if Layers[5] == true then if Popul[1] == true then DrawPopup() end end
+if Layers[5] == true then if Popup[1] == true then DrawPopup() end end
 end
 
 Layers = {true,true,true,true,true}
