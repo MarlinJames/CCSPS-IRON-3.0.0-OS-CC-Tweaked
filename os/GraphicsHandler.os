@@ -4,7 +4,7 @@ local function CombineLayers_D()
 local Doc = fs.open("os/files/Display_M.nfp","w")
 local LINES = {}
 for i = 1, #fs.list("os/files/layers") do
-    local file = fs.open("os/files/Display_L"..i..".nfp","r")
+    local file = fs.open("os/files/layers/Display_L"..i..".nfp","r")
     local Line
     for y = 1, h do
         Line = file.readLine()
