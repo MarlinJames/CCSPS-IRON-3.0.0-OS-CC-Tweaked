@@ -145,6 +145,51 @@ function fillColor(l,old,new)
 
 end
 
+function drawLine(x,y,le,dir,l,c)
+local Path = ("os/files/layers/Display_L"..l..".nfp")
+local R = fs.open(Path,"r")
+local line
+local LINES = {}
+repeat
+    line = R.readLine()
+    if line ~= nil then LINES[#LINES + 1] = line end
+until line == nil
+R.close()
+local W = fs.open(Path,"w")
+for i = 1, le do
+    LINES[y] = string.sub(LINES[y],1,x-1)..c..string.sub(LINES[y],x+1,string.len(LINES[y]))
+    if dir == 0 then--horizontal
+        x = x + 1
+    elseif dir == 1 then--vertical
+        y = y + 1
+    end
+for i = 1, #LINES do
+    W.writeLine(LINES[i])
+end
+W.close()
+end
+
+function drawBox(x,y,W,H,l,c)
+local Path = ("os/files/layers/Display_L"..l..".nfp")
+local R = fs.open(Path,"r")
+local line
+local LINES = {}
+repeat
+    line = R.readLine()
+    if line ~= nil then LINES[#LINES + 1] = line end
+until line == nil
+R.close()
+local W = fs.open(Path,"w")
+for i = 1, W*H do
+    LINES[y] = string.sub(LINES[y],1,x-1)..c..string.sub(LINES[y],x+1,string.len(LINES[y]))
+    if x == W then y = y + 1 x = x-(W-1) else x = x + 1 end
+end
+for i = 1, #LINES do
+    W.writeLine(LINES[i])
+end
+W.close()
+end
+
 function CreateLayer(l,type,fill)--will create new layer file full of spaces
 local path
 local file
