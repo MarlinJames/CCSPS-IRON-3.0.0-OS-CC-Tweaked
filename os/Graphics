@@ -29,20 +29,20 @@ local Doc = fs.open("os/files/Display_textM.txt","w")
 local LINES = {}
 for i = 1, #fs.list("os/files/textLayers") do
     local file = fs.open("os/files/textLayers/Display_T"..i..".txt","r")
-    local layer
-    if fs.exists("os/files/layers/Display_L"..(i+1)..".nfp") then layer = fs.open("os/files/layers/Display_L"..(i+1)..".nfp","r") else layer = nil end
+    local layer = -1
+    if fs.exists("os/files/layers/Display_L"..(i+1)..".nfp") then layer = fs.open("os/files/layers/Display_L"..(i+1)..".nfp","r") else layer = -1 end
     local Line
     for y = 1, h do
         Line = file.readLine()
         local STR =""
         local LC
-        if layer ~= nil then LC = layer.readLine() end
+        if layer ~= -1 then LC = layer.readLine() end
         for x = 1, w do
-            if ((layer ~= nil and string.sub(LC,x,x) == " ") or layer == nil) and string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            if (layer == -1 or (layer ~= -1 and string.sub(LC,x,x) == " ")) and string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
-    if layer ~= nil then layer.close() end
+    if layer ~= -1 then layer.close() end
     file.close()
 end
 for i = 1, #LINES do
