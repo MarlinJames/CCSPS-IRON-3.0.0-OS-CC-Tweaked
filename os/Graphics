@@ -1,4 +1,4 @@
-local w, h = term.getSize()
+local w, h = settings.get("system.dimensions")
 
 local function CombineLayers_D()
 local Doc = fs.open("os/files/Display_M.nfp","w")
