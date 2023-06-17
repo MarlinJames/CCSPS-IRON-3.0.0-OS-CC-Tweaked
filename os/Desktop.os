@@ -14,7 +14,7 @@ local Popup = {false,1,1,{},nil}
 local DesktopDraw = true
 local FullScreen = false
 
-local Layers = {false,false,false,false}--desktop,shortcuts,windows,taskbar
+local Layers = {false,false,false,false,false}--desktop,shortcuts,windows,taskbar
 local w, h = term.getSize()
  
 function GetPaths()
@@ -337,7 +337,7 @@ end
 term.setBackgroundColor(colors.black)
 end
  
-function Draw()
+function DrawWindows()
     term.setBackgroundColor(colors.black)
     local I = 1
     term.setTextColor(colors.black)
@@ -377,7 +377,7 @@ function drawFrame()
 local a, b = term.getSize()
 if a ~= w or b ~= h then Clear() end
 if Layers[1] == true then drawDesktop() end
-if Layers[3] == true then Draw() end
+if Layers[3] == true then DrawWindows() end
 if Layers[4] == true then DrawTaskbar() end
 if Layers[5] == true then DrawPopup() end
 end
