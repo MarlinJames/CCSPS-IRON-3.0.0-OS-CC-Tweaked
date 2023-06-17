@@ -15,7 +15,8 @@ local DesktopDraw = true
 local FullScreen = false
 
 local Layers = {false,false,false,false,false}--desktop,shortcuts,windows,taskbar
-local w, h = term.getSize()
+local systemDi = textutils.unserialize(settings.get("system.dimensions"))
+local w, h = systemDi[1],systemDi[2]
  
 function GetPaths()
 local references = {{"Files"},{"User"},{"Desktop"},{"Documents"}}
@@ -285,12 +286,12 @@ end
  
 function drawTaskbar()
 if FullScreen == false then
-Graphics.drawBox(1,h-1,w,1,4,7)
-Graphics.drawBox(1,h,w,1,4,8)
+Graphics.drawBox(1,h-1,w,1,4,"7")
+Graphics.drawBox(1,h,w,1,4,"8")
 local x = 3
 local Tabs = {}
 for i = 1, #Items do
-    Graphics.drawBox(x, h -2, 2, 3,4, 0)
+    Graphics.drawBox(x, h -2, 2, 3,4, "0")
     Tabs[i] = 0
     x = x + 5
 end
@@ -302,13 +303,12 @@ for i = 1, #Windows do
             if Windows[i][1] == Items[I][1] then Tabs[I] = Tabs[I] + 1 Found = true end
         end
         if Found == false then
-            paintutils.drawFilledBox(x, h-2, x + 2, h, colors.yellow)
+            Graphics.drawBox(x, h-2,2, 3, 4,"4")
             x = x + 5
         end
     end
 end
 x = 3
-term.setBackgroundColor(colors.lightGray)
 for i = 1, #Tabs do
     term.setCursorPos(x, h)
     if Tabs[i] > 0 then
@@ -322,7 +322,7 @@ end
 end
  
 function drawDesktop()
-paintutils.drawFilledBox(1,1,w,h-2,colors.black)
+Graphics.drawBox(1,1,w,h,1,"f")
 end
 
 function drawShortcuts()
@@ -334,7 +334,7 @@ if DesktopDraw == true then
 local y = 2
 local x = 2
 for i = 1, #DeskItems do
-    Graphics.drawBox(x,y,3,3,3,9)
+    Graphics.drawBox(x,y,3,3,2,9)
     if x + 8 < w then x = x + 6 else x = 2 y = y + 5 end
 end
 end
