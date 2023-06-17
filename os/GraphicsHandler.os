@@ -85,7 +85,11 @@ repeat
 until line == nil
 R.close()
 local W = fs.open(Path,"w")
-LINES[y] = 
+LINES[y] = string.sub(LINES[y],1,x-1)..color..string.sub(LINES[y],x+1,string.len(LINES[y]))
+for i = 1, #LINES do
+    W.writeLine(LINES[i])
+end
+W.close()
 end
 
 function fillColor(old,new)
