@@ -125,6 +125,7 @@ W.close()
 end
 
 function addText(x,y,l,t)
+t = string.sub(t,2,string.len(t)-1)
 local Path = ("os/files/textLayers/Display_T"..l..".txt")
 local R = fs.open(Path,"r")
 local line
