@@ -44,6 +44,16 @@ end
 Doc.close()
 end
 
+local function GetColor(K)
+local C
+local CL = {{"1",colors.white},{"2",colors.orange},{"3",},{"4",},{"5",},{"6",},{"7",},{"8,},{"9",},{"a",},{"b",},{"c"},{"d",},{"e",},{"f",}}
+for i = 1, #CL do
+    if K == CL[i][1] then C = CL[i][2] end
+end
+if C == nil then C == colors.black end
+return C
+end
+
 function DrawScreen()
 
 end
@@ -64,7 +74,7 @@ if fs.exists(TPath) then Text = tFile.readLine() UT = true end
 local Color = colors.black
 local Char = " "
 repeat
-    Color = string.sub(Line,x,x)
+    Color = GetColor(string.sub(Line,x,x))
     if UT == true then Char = string.sub(Text,x,x) end
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
