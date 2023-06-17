@@ -12,7 +12,7 @@ for i = 1, #fs.list("os/files/layers") do
         Line = file.readLine()
         local STR =""
         for x = 1, w do
-            if string.sub(Line,x) ~= " " then STR = STR..string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
+            if string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
@@ -27,23 +27,38 @@ end
 local function CombineLayers_T()
 local Doc = fs.open("os/files/Display_textM.txt","w")
 local LINES = {}
-for i = 1, 4 do
-    local file = fs.open("os/files/Display_T"..i..".txt","r")
+for i = 1, #fs.list("os/files/textLayers") do
+    local file = fs.open("os/files/textLayers/Display_T"..i..".txt","r")
+    local layer
+    if fs.exists("os/files/layers/Display_L"..(i+1)..".nfp") then layer = fs.open("os/files/layers/Display_L"..(i+1)..".nfp","r") else layer = nil end
     local Line
     for y = 1, h do
         Line = file.readLine()
         local STR =""
+        local LC
+        if layer ~= nil then LC = layer.readLine() end
         for x = 1, w do
-            if string.sub(Line,x) ~= " " then STR = STR + string.sub(Line,x) else STR = STR + string.sub(LINES[y],x) end
+            if ((layer ~= nil and string.sub(LC,x,x) == " ") or layer == nil) and string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
+    if layer ~= nil then layer.close() end
     file.close()
 end
 for i = 1, #LINES do
     Doc.writeLine(LINES[i])
 end
 Doc.close()
+end
+
+local function getReadableTextColor(K)
+local C
+local CL = {{"0",colors.black},{"1",colors.white},{"2",colors.white},{"3",colors.white},{"4",colors.red},{"5",colors.black},{"6",colors.white},{"7",colors.white},{"8",colors.white},{"9",colors.white},{"a",colors.white},{"b",colors.white},{"c",colors.white},{"d",colors.white},{"e",colors.yellow},{"f",colors.white}}
+for i = 1, #CL do
+    if K == CL[i][1] then C = CL[i][2] end
+end
+if C == nil then C = colors.black end
+return C
 end
 
 local function GetColor(K)
@@ -80,7 +95,7 @@ repeat
     if UT == true then Char = string.sub(Text,x,x) end
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
-    if UT == true and Char ~= " " then if Color == 0 then term.setTextColor(colors.black) else term.setTextColor(colors.white) end term.write(Char) else term. setTextColor(Color) term.write(0) end
+    if UT == true and Char ~= " " then term.setTextColor(getReadableTextColor(string.sub(Line,x,x))) term.write(Char) else term. setTextColor(Color) term.write(0) end
     byte = byte + 1
     if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() if UT == true then Text = tFile.readLine() end else x = x + 1 end
 until y == h+1
@@ -107,8 +122,33 @@ end
 W.close()
 end
 
+function addText(x,y,l,t)
+local Path = ("os/files/textLayers/Display_T"..l..".txt")
+local R = fs.open(Path,"r")
+local line
+local LINES = {}
+repeat
+    line = R.readLine()
+    if line ~= nil then LINES[#LINES + 1] = line end
+until line == nil
+R.close()
+local W = fs.open(Path,"w")
+LINES[y] = string.sub(LINES[y],1,x-1)..t..string.sub(LINES[y],x+string.len(t),string.len(LINES[y]))
+for i = 1, #LINES do
+    W.writeLine(LINES[i])
+end
+W.close()
+end
+
 function fillColor(old,new)
 
+end
+
+function CreateLayer(l,type)--will create new lauer file full of spaces
+local x = 1
+for i = 1, w*h do
+
+end
 end
 
 function boot()
