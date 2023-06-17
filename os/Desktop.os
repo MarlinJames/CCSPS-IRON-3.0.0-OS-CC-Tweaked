@@ -220,12 +220,12 @@ if Found == false then
             if x >= Windows[i][5] and x <= Windows[i][5] + Windows[i][7] and y >= Windows[i][6] + 1 and y <= Windows[i][6] + Windows[i][8] then
                 --checks slaved entities to see if they were clicked
             end
-            if x == (X1 + W1) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true end --used to see if user clicked minimized button
-            if x == (X1 + W1) - 1 and y == Windows[i][6] then
+            if x == (X1 + (W1-1)) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true end --used to see if user clicked minimized button
+            if x == (X1 + (W1-1)) - 1 and y == Windows[i][6] then
                 if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
                 Found = true
             end
-            if x == X1 + W1 and y == Y1 then Windows[i] = nil Found = true end
+            if x == X1 + (W1-1) and y == Y1 then Windows[i] = nil Found = true end
  
         else
             if x >= I and x <= I + 2 and y >= h - 2 then Windows[i][4][2] = true Found = true end
@@ -353,7 +353,7 @@ function drawWindows()
             if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
             Graphics.drawBox(X1,Y1+1,W1,H1,3,"0")
             --removed gray window outline
-            Graphics.drawLine(X1,Y1,W1,1,3,"8")
+            Graphics.drawLine(X1,Y1,W1-3,0,3,"8")
             --need to replace minimize,resize, and close buttons
             Graphics.addText(X1,Y1,3,Windows[i][3])
         end
