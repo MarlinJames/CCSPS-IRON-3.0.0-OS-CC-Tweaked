@@ -46,7 +46,7 @@ end
 
 local function GetColor(K)
 local C
-local CL = {{"1",colors.white},{"2",colors.orange},{"3",},{"4",},{"5",},{"6",},{"7",},{"8,},{"9",},{"a",},{"b",},{"c"},{"d",},{"e",},{"f",}}
+local CL = {{"0",colors.white},{"1",colors.orange},{"2",colors.magenta},{"3",colors.lightBlue},{"4",colors.yellow},{"5",colors.lime},{"6",colors.pink},{"7",colors.gray},{"8",colors.lightGray},{"9",colors.cyan},{"a",colors.purple},{"b",colors.blue},{"c",colors.brown},{"d",colors.green},{"e",colors.red},{"f",colors.black}}
 for i = 1, #CL do
     if K == CL[i][1] then C = CL[i][2] end
 end
