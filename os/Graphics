@@ -64,13 +64,13 @@ if fs.exists(TPath) then Text = tFile.readLine() UT = true end
 local Color = colors.black
 local Char = " "
 repeat
-    Color = string.sub(Line,x)
-    if UT == true then Char = string.sub(Text,x) end
+    Color = string.sub(Line,x,x)
+    if UT == true then Char = string.sub(Text,x,x) end
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
     if UT == true and Char ~= " " then if Color == 0 then term.setTextColor(colors.black) else term.setTextColor(colors.white) end term.write(Char) else term. setTextColor(Color) term.write(0) end
     byte = byte + 1
-    if x == w then x = 1 y = y + 1 Line = file.readLine if UT == true then Text = tFile.readLine() end else x = x + 1 end
+    if x == w then x = 1 y = y + 1 Line = file.readLine() if UT == true then Text = tFile.readLine() end else x = x + 1 end
 until byte >= tByte
 
 file.close()
@@ -108,7 +108,7 @@ local file = fs.open("os/files/layers/Display_L1.nfp","w")
 local x = 1
 local Line = ""
 for i = 1, w*h do
-    Line = Line.."0"
+    Line = Line.."f"
     if x == w then x = 1 file.writeLine(tostring(Line)) Line = "" else x = x + 1 end
 end
 file.close()
