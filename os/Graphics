@@ -88,18 +88,19 @@ local Line = file.readLine()
 local Text 
 local Color = colors.black
 local Char = " "
+local SavedC = {}
 repeat
     Color = GetColor(string.sub(Line,x,x))
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
     term.setTextColor(Color)
-    byte = byte + 1
+    Saved[y][x] = tostring(string.sub(Line,x,x))
     if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
 until y == h+1
+x, y = 1, 1
 repeat
     term.setCursorPos(x,y)
-    term.setBackgroundColor(Color)
-    byte = byte + 1
+    term.blitz(string.sub(Line,x,x),getReadableTextColor(SavedC[y][x]),SavedC[y][x])
     if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
 until y == h+1
 file.close()
@@ -125,7 +126,7 @@ end
 
 function addText(x,y,l,t)
 t = string.sub(t,2,string.len(t)-1)
-local Path = ("os/files/textLayers/Display_T"..l..".txt")
+local Path = ("os/files/layers/Display_L"..l..".nfp")
 local R = fs.open(Path,"r")
 local line
 local LINES = {}
@@ -135,7 +136,7 @@ repeat
 until line == nil
 R.close()
 local W = fs.open(Path,"w")
-LINES[y] = string.sub(LINES[y],1,x-1)..t..string.sub(LINES[y],x+string.len(t),string.len(LINES[y]))
+LINES[y+h] = string.sub(LINES[y],1,x-1)..t..string.sub(LINES[y],x+string.len(t),string.len(LINES[y]))
 for i = 1, #LINES do
     W.writeLine(LINES[i])
 end
