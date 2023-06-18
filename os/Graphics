@@ -3,7 +3,6 @@ local SystemDi = textutils.unserialize(settings.get("system.dimensions"))
 local w, h = SystemDi[1], SystemDi[2]
 
 local function CombineLayers_D()
-local Doc = fs.open("os/files/Display_M.nfp","w")
 local LINES = {}
 for i = 1, #fs.list("os/files/layers") do
     local file = fs.open("os/files/layers/Display_L"..i..".nfp","r")
@@ -14,12 +13,13 @@ for i = 1, #fs.list("os/files/layers") do
         for x = 1, w do
             print(x,y,i)
             term.scroll(1)
-            if Line == nil then STR = STR.." " elseif string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            if Line == nil then STR = STR.." " elseif string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
     file.close()
 end
+local Doc = fs.open("os/files/Display_M.nfp","w")
 for i = 1, #LINES do
     Doc.writeLine(LINES[i])
 end
