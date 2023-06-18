@@ -108,7 +108,7 @@ if E == "application" then
         Windows[#Windows+1]={b,CreateWID(),c,d,1,1,20,20}
         Windows[#Windows][4][3] = true--if window is visible
         cleanWin()
-        drawFrame()
+        drawWindows()
     elseif a == "data" then
         local ET = c
         local I = #Window_Entities
@@ -146,7 +146,7 @@ while true do
     if event == "timer" and Pass == false then
         CheckPopup()
     elseif Pass == true then
-
+        Graphics.UpdateScreen()
     end
 end
 end
@@ -224,12 +224,12 @@ if Found == false then
             if x >= Windows[i][5] and x <= Windows[i][5] + Windows[i][7] and y >= Windows[i][6] + 1 and y <= Windows[i][6] + Windows[i][8] then
                 --checks slaved entities to see if they were clicked
             end
-            if x == (X1 + (W1-1)) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true end --used to see if user clicked minimized button
+            if x == (X1 + (W1-1)) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true cleanWin() drawWindows() end --used to see if user clicked minimized button
             if x == (X1 + (W1-1)) - 1 and y == Windows[i][6] then
                 if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
                 Found = true
             end
-            if x == X1 + (W1-1) and y == Y1 then Windows[i] = nil Found = true end
+            if x == X1 + (W1-1) and y == Y1 then Windows[i] = nil Found = true cleanWin() drawWindows() end
  
         else
             if x >= I and x <= I + 2 and y >= h - 2 then Windows[i][4][2] = true Found = true end
