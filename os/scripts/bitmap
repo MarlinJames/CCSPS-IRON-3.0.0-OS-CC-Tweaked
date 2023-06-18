@@ -4,7 +4,7 @@ function createMap(Map,x,y,w,h)
 local Path = fs.combine(Dir,Map..".bit")
 local file = fs.open(Path,"w")
 file.writeLine(textutils.serialize({x,y,w,h,true},{compact=true}))
-for i = 1, h do
+for i = 1, h-1 do
     file.writeLine(string.rep("x",w))
 end
 file.close()
@@ -28,7 +28,7 @@ if string.sub(Lines[y+1],x,x) ~= "x" then
     local Res = {}
     local settings = textutils.unserialize(Lines[1])
     local h = settings[4]
-    for i = h+1, #Lines do
+    for i = h+1, #Lines-h do
         local Det = textutils.unserialize(Lines[i])
         local X1, Y1 = settings[1]+Det[4],settings[2]+Det[5]
         local X2,Y2 = X1+(Det[6]-1), Y1+(Det[7]-1)
@@ -43,7 +43,7 @@ function addObject(Map,id,type,path,x,y,w,h)
 local Lines = ReadFile(Map)
 local Symbol
 if type == "button" then Symbol = "b" elseif type == "text" then Symbol = "t" elseif type == "image" then Symbol = "i" elseif type == "input" then Symbol = "s" end
-for i = 1, h do
+for i = 1, h-1 do
     Lines[y+i] = string.sub(Lines[y+i],1,x-1)..string.rep(Symbol,w)..string.sub(Lines[y+i],x+(w-1),string.len(Lines[y+i]))
 end
 Lines[#Lines+1] = textutils.serialize({id,type,path,x,y,w,h,true},{compact=true})
