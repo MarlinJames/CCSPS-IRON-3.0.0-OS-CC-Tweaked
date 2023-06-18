@@ -10,7 +10,12 @@ for i = 1, #fs.list("os/files/layers") do
     local Line
     for y = 1, h do
         Line = file.readLine()
-        LINES[y] = Line
+        local STR
+        for x = 1, w do
+
+        end
+        if LINES[y] == nil then LINES[y] = Line else LINES[y] = string.gsub(LINES[y],"
+        print(y)
     end
     repeat
         Line = file.readLine()
