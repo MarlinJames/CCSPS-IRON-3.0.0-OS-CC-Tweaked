@@ -12,7 +12,9 @@ for i = 1, #fs.list("os/files/layers") do
         Line = file.readLine()
         local STR =""
         for x = 1, w do
-            if string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            print(x,y,i)
+            term.scroll(1)
+            if Line == nil then STR = STR.." " elseif string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
@@ -90,17 +92,17 @@ local Color = colors.black
 local Char = " "
 local SavedC = {}
 repeat
-    Color = GetColor(string.sub(Line,x,x))
+    Color = GetColor(string.sub(tostring(Line),x,x))
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
     term.setTextColor(Color)
-    Saved[y][x] = tostring(string.sub(Line,x,x))
+    SavedC[y][x] = string.sub(Line,x,x)
     if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
 until y == h+1
 x, y = 1, 1
 repeat
     term.setCursorPos(x,y)
-    term.blitz(string.sub(Line,x,x),getReadableTextColor(SavedC[y][x]),SavedC[y][x])
+    if Line == nil then else term.blitz(string.sub(Line,x,x),getReadableTextColor(SavedC[y][x]),SavedC[y][x]) end
     if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
 until y == h+1
 file.close()
@@ -225,7 +227,7 @@ for i = 1, #fs.list("os/files/layers") do
     local T = ("os/files/layers/Display_L"..i..".nfp")
     if fs.exists(T) then fs.delete(T) end
 end
-createLayer(1,"color","f")
+createLayer(1,"f")
 fs.delete("os/files/Display_M.nfp")
 fs.delete("os/files/Display_textM.txt")
 end
