@@ -79,6 +79,7 @@ repeat
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
     term.setTextColor(Color)
+    term.write("0")
     SavedC[y][x] = string.sub(Line,x,x)
     if y==h and x==w then y = -1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() SavedC[y] = {} else x = x + 1 end
 until y == -1
