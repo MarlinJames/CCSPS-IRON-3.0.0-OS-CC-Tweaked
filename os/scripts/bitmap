@@ -1,4 +1,4 @@
-local Dir = "os/scripts/bitmaps"
+local Dir = "os/files/bitmaps"
 --bitmap settings: screenx,screeny,mapwidth,mapheight,active
 function createMap(Map,x,y,w,h)
 local Path = fs.combine(Dir,Map..".bit")
