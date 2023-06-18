@@ -4,52 +4,25 @@ local w, h = SystemDi[1], SystemDi[2]
 
 local function CombineLayers_D()
 local LINES = {}
+local TEXT = {}
 for i = 1, #fs.list("os/files/layers") do
     local file = fs.open("os/files/layers/Display_L"..i..".nfp","r")
     local Line
-    for y = 1, h*2 do
+    for y = 1, h do
         Line = file.readLine()
-        local STR =""
-        for x = 1, w do
-            print(x,y,i)
-            term.scroll(1)
-            if Line == nil then STR = STR.." " elseif string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
-        end
-        LINES[y] = STR
+        LINES[y] = Line
     end
+    repeat
+        if Line ~= nil then TEXT[#TEXT + 1] = textutils.unserialize(Line) end
+    until Line == nil
     file.close()
 end
 local Doc = fs.open("os/files/Display_M.nfp","w")
 for i = 1, #LINES do
     Doc.writeLine(LINES[i])
 end
-Doc.close()
-end
-
-local function CombineLayers_T()
-local Doc = fs.open("os/files/Display_textM.txt","w")
-local LINES = {}
-for i = 1, #fs.list("os/files/textLayers") do
-    local file = fs.open("os/files/textLayers/Display_T"..i..".txt","r")
-    local layer = -1
-    local UT = false
-    if fs.exists("os/files/layers/Display_L"..(i+1)..".nfp") then layer = fs.open("os/files/layers/Display_L"..(i+1)..".nfp","r") UT = true else UT = false end
-    local Line
-    for y = 1, h do
-        Line = file.readLine()
-        local STR =""
-        local LC
-        if UT == true then LC = layer.readLine() end
-        for x = 1, w do
-            if UT == true and string.sub(LC,x,x) ~= " " then STR=STR.." " else if string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end end
-        end
-        LINES[y] = STR
-    end
-    if UT == true then layer.close() end
-    file.close()
-end
-for i = 1, #LINES do
-    Doc.writeLine(LINES[i])
+for i = 1, #TEXT do
+    Doc.writeLine(textutils.serialize(TEXT[i],{compact=true})
 end
 Doc.close()
 end
@@ -101,10 +74,9 @@ repeat
 until y == h+1
 x, y = 1, 1
 repeat
-    term.setCursorPos(x,y)
-    if Line == nil then else term.blitz(string.sub(Line,x,x),getReadableTextColor(SavedC[y][x]),SavedC[y][x]) end
-    if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
-until y == h+1
+    Line = file.readLine()
+    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y)) term.blitz(TX[1],getReadAbleColor(SavedC[y][x]),SavedC[y][x]) end
+until Line == nil
 file.close()
 end
 
@@ -138,7 +110,7 @@ repeat
 until line == nil
 R.close()
 local W = fs.open(Path,"w")
-LINES[y+h] = string.sub(LINES[y],1,x-1)..t..string.sub(LINES[y],x+string.len(t),string.len(LINES[y]))
+LINES[#LINES+1] = textutils.serialize({t,x,y},{compact=true})
 for i = 1, #LINES do
     W.writeLine(LINES[i])
 end
@@ -202,10 +174,7 @@ local path = ("os/files/layers/Display_L"..l..".nfp")
 file = fs.open(path,"w")
 
 for i = 1, h do
-    if fill ~= nil then file.writeLine(string.rep(fill,w)) else file.writeLine(string.rep(" ",w)) end
-end
-for i = 1, h do
-    file.writeLine(string.rep(" ",w))
+    if fill ~= nil then file.writeLine(string.rep(fill,w)) else file.writeLine(string.rep("x",w)) end
 end
 file.close()
 end
@@ -217,7 +186,7 @@ if type == "text" then path = ("os/files/textLayers/Display_T"..l..".txt") elsei
 file = fs.open(path,"w")
 
 for i = 1, h do
-    file.writeLine(string.rep(" ",w))
+    file.writeLine(string.rep("x",w))
 end
 file.close()
 end
