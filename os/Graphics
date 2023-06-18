@@ -194,14 +194,16 @@ end
 Doc.close()
 end
 
-function createLayer(l,type,fill)--will create new layer file full of spaces
-local path
+function createLayer(l,fill)--will create new layer file full of spaces
 local file
-if type == "text" then path = ("os/files/textLayers/Display_T"..l..".txt") elseif type == "color" then path = ("os/files/layers/Display_L"..l..".nfp") end
+local path = ("os/files/layers/Display_L"..l..".nfp")
 file = fs.open(path,"w")
 
 for i = 1, h do
     if fill ~= nil then file.writeLine(string.rep(fill,w)) else file.writeLine(string.rep(" ",w)) end
+end
+for i = 1, h do
+    file.writeLine(string.rep(" ",w))
 end
 file.close()
 end
