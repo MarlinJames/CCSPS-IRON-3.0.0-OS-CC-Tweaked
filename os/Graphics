@@ -86,7 +86,7 @@ until y == -1
 x, y = 1, 1
 Line = file.readLine()
 repeat
-    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[3], TX[4] term.setCursorPos(x,y) local TT ="" local CT = "" for i = 1, string.len(TX[1]) do CT=CT..SavedC[y][x+(i-1)] TT = TT..getReadableTextColor(SavedC[y][x+(i-1)]) end term.blit(TX[1],TT,CT) Line = file.readLine() end
+    if Line ~= nil then local TX = textutils.unserialize(Line) TX[1] = tostring(TX[1]) x, y = TX[3], TX[4] term.setCursorPos(x,y) local TT ="" local CT = "" for i = 1, string.len(TX[1]) do CT=CT..SavedC[y][x+(i-1)] TT = TT..getReadableTextColor(SavedC[y][x+(i-1)]) end term.blit(TX[1],TT,CT) Line = file.readLine() end
 until Line == nil
 file.close()
 end
@@ -122,7 +122,7 @@ R.close()
 local W = fs.open(Path,"w")
 local Pass = false
 local P
-for i = h, #LINES do
+for i = h+1, #LINES do
     local Det = textutils.unserialize(LINES[i])
     if Det[2] == id then Det[1] = t Pass = true P = i end
 end
