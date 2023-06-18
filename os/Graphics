@@ -20,9 +20,9 @@ for i = 1, #fs.list("os/files/layers") do
             LINES[y] = STR
         end
     end
+    Line = file.readLine()
     repeat
-        Line = file.readLine()
-        if Line ~= nil then TEXT[#TEXT + 1] = textutils.unserialize(Line) end
+        if Line ~= nil then TEXT[#TEXT + 1] = textutils.unserialize(Line) Line = file.readLine()end
     until Line == nil
     file.close()
 end
@@ -84,9 +84,9 @@ repeat
     if y==h and x==w then y = -1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
 until y == -1
 x, y = 1, 1
+Line = file.readLine()
 repeat
-    Line = file.readLine()
-    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) term.blitz(TX[1],getReadAbleColor(SavedC[y][x]),SavedC[y][x]) end
+    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) term.blitz(TX[1],getReadAbleColor(SavedC[y][x]),SavedC[y][x]) Line = file.readLine() end
 until Line == nil
 file.close()
 end
