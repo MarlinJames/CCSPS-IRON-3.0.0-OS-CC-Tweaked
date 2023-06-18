@@ -85,7 +85,7 @@ until y == -1
 x, y = 1, 1
 Line = file.readLine()
 repeat
-    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) term.blit(TX[1],getReadableTextColor(SavedC[y][x]),SavedC[y][x]) Line = file.readLine() end
+    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) local TT ="" local CT = "" for i = 1, string.len(TX[1]) do CT=CT..SavedC[y][x+(i-1)] TT = TT..getReadableTextColor(SavedC[y][x+(i-1)]) end term.blit(TX[1],TT,CT) Line = file.readLine() end
 until Line == nil
 file.close()
 end
