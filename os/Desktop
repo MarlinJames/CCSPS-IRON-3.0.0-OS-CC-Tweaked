@@ -128,7 +128,6 @@ elseif E == "mouse_click" then
     if CheckWindows(b,c) == true then Pass = true end
 elseif E == "mouse_drag" then
     GetDragWindow(b,c)
-    Pass = true
 elseif E == "modem_message" then
     Notifications[#Notifications + 1] = {"message",b,c,d,e}
     Pass = true
