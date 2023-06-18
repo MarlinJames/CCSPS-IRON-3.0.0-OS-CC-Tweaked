@@ -72,7 +72,7 @@ local Line = file.readLine()
 local Text 
 local Color = colors.black
 local Char = " "
-local SavedC = {}
+local SavedC = {{}}
 repeat
     if string.sub(Line,x,x) ~= "x" then
         Color = GetColor(string.sub(Line,x,x))
@@ -81,7 +81,7 @@ repeat
         term.setTextColor(Color)
     end
     SavedC[y][x] = string.sub(Line,x,x)
-    if y==h and x==w then y = -1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
+    if y==h and x==w then y = -1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() SavedC[y] = {} else x = x + 1 end
 until y == -1
 x, y = 1, 1
 Line = file.readLine()
