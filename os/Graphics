@@ -13,6 +13,7 @@ for i = 1, #fs.list("os/files/layers") do
         LINES[y] = Line
     end
     repeat
+        Line = file.readLine()
         if Line ~= nil then TEXT[#TEXT + 1] = textutils.unserialize(Line) end
     until Line == nil
     file.close()
@@ -22,7 +23,7 @@ for i = 1, #LINES do
     Doc.writeLine(LINES[i])
 end
 for i = 1, #TEXT do
-    Doc.writeLine(textutils.serialize(TEXT[i],{compact=true})
+    Doc.writeLine(textutils.serialize(TEXT[i],{compact=true}))
 end
 Doc.close()
 end
@@ -65,17 +66,19 @@ local Color = colors.black
 local Char = " "
 local SavedC = {}
 repeat
-    Color = GetColor(string.sub(tostring(Line),x,x))
-    term.setCursorPos(x,y)
-    term.setBackgroundColor(Color)
-    term.setTextColor(Color)
+    if string.sub(Line,x,x) ~= "x" then
+        Color = GetColor(string.sub(Line,x,x))
+        term.setCursorPos(x,y)
+        term.setBackgroundColor(Color)
+        term.setTextColor(Color)
+    end
     SavedC[y][x] = string.sub(Line,x,x)
-    if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
-until y == h+1
+    if y==h and x==w then y = -1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
+until y == -1
 x, y = 1, 1
 repeat
     Line = file.readLine()
-    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y)) term.blitz(TX[1],getReadAbleColor(SavedC[y][x]),SavedC[y][x]) end
+    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) term.blitz(TX[1],getReadAbleColor(SavedC[y][x]),SavedC[y][x]) end
 until Line == nil
 file.close()
 end
