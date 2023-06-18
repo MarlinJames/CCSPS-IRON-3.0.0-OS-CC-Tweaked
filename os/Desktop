@@ -242,6 +242,7 @@ if Found == false then
 end
 if Found == false and DesktopDraw == true then
     local RR = bitmap.checkCollision("desktop",x,y)
+    Graphics.editText(RR[1],"debug2",4,5,5)
     if #RR > 0 then shell.run("os/ProgramReader.os",RR[3],"call","onCreation") shell.run("os/ProgramReader.os",RR[3],"call","onStart") end
 end
 if 1 == 0 then--working on transfering responsibilities to bitmap script
