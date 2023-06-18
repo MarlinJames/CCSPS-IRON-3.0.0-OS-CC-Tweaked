@@ -86,7 +86,7 @@ until y == -1
 x, y = 1, 1
 Line = file.readLine()
 repeat
-    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) local TT ="" local CT = "" for i = 1, string.len(TX[1]) do CT=CT..SavedC[y][x+(i-1)] TT = TT..getReadableTextColor(SavedC[y][x+(i-1)]) end term.blit(TX[1],TT,CT) Line = file.readLine() end
+    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[3], TX[4] term.setCursorPos(x,y) local TT ="" local CT = "" for i = 1, string.len(TX[1]) do CT=CT..SavedC[y][x+(i-1)] TT = TT..getReadableTextColor(SavedC[y][x+(i-1)]) end term.blit(TX[1],TT,CT) Line = file.readLine() end
 until Line == nil
 file.close()
 end
@@ -109,7 +109,7 @@ end
 W.close()
 end
 
-function addText(x,y,l,t)
+function editText(x,y,l,t,id)
 t = string.sub(t,2,string.len(t)-1)
 local Path = ("os/files/layers/Display_L"..l..".nfp")
 local R = fs.open(Path,"r")
@@ -121,7 +121,14 @@ repeat
 until line == nil
 R.close()
 local W = fs.open(Path,"w")
-LINES[#LINES+1] = textutils.serialize({t,x,y},{compact=true})
+local Pass = false
+local P
+for i = h, #LINES do
+    local Det = textutils.unserialize(LINES[i])
+    if Det[2] == id then Det[1] = t Pass = true P = iend
+end
+if Pass == false then P = #LINES +1
+LINES[P]= textutils.serialize({t,id,x,y},{compact=true})
 for i = 1, #LINES do
     W.writeLine(LINES[i])
 end
