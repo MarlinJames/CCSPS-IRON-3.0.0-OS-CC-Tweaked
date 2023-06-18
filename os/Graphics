@@ -126,7 +126,7 @@ for i = h, #LINES do
     local Det = textutils.unserialize(LINES[i])
     if Det[2] == id then Det[1] = t Pass = true P = i end
 end
-if Pass == false then P = #LINES +1
+if Pass == false then P = #LINES +1 end
 LINES[P]= textutils.serialize({t,id,x,y},{compact=true})
 for i = 1, #LINES do
     W.writeLine(LINES[i])
