@@ -8,11 +8,11 @@ local LINES = {}
 for i = 1, #fs.list("os/files/layers") do
     local file = fs.open("os/files/layers/Display_L"..i..".nfp","r")
     local Line
-    for y = 1, h do
+    for y = 1, h*2 do
         Line = file.readLine()
         local STR =""
         for x = 1, w do
-            if string.sub(Line,x,x) ~= " " then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
+            if string.sub(Line,x,x) ~= "%s" then STR = STR..string.sub(Line,x,x) else STR = STR..string.sub(LINES[y],x,x) end
         end
         LINES[y] = STR
     end
@@ -78,32 +78,31 @@ end
 
 function UpdateScreen()
 CombineLayers_D()
-CombineLayers_T()
+--gave other one job of combining text as well.
 local x = 1
 local y = 1
 local tByte = fs.getSize("os/files/Display_M.nfp")
 local byte = 1
 local file = fs.open("os/files/Display_M.nfp","r")
-local TPath = "os/files/Display_textM.txt"
-local tFile = fs.open(TPath,"r")
 local Line = file.readLine()
 local Text 
-local UT = false
-if fs.exists(TPath) then Text = tFile.readLine() UT = true end
 local Color = colors.black
 local Char = " "
 repeat
     Color = GetColor(string.sub(Line,x,x))
-    if UT == true then Char = string.sub(Text,x,x) end
     term.setCursorPos(x,y)
     term.setBackgroundColor(Color)
-    if UT == true and Char ~= "%s" then term.setTextColor(getReadableTextColor(string.sub(Line,x,x))) term.write(Char) else term. setTextColor(Color) term.write(0) end
+    term.setTextColor(Color)
     byte = byte + 1
-    if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() if UT == true then Text = tFile.readLine() end else x = x + 1 end
+    if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
 until y == h+1
-
+repeat
+    term.setCursorPos(x,y)
+    term.setBackgroundColor(Color)
+    byte = byte + 1
+    if y==h and x==w then y = h+1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() else x = x + 1 end
+until y == h+1
 file.close()
-if UT == true then tFile.close() end
 end
 
 function editPixel(x,y,l,color)
