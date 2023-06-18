@@ -1,4 +1,4 @@
-local Dir = fs.find("bitmaps")
+local Dir = "os/scripts/bitmaps"
 --bitmap settings: screenx,screeny,mapwidth,mapheight,active
 function createMap(Map,x,y,w,h)
 local Path = fs.combine(Dir,Map..".bit")
@@ -15,7 +15,7 @@ local file = fs.open(fs.combine(Dir,id..".bit"),"r")
 local Lines = {}
 local Line
 repeat
-    Line = fs.readLine()
+    Line = file.readLine()
     if Line ~= nil then Lines[#Lines+1] = Line end
 until Line == nil
 file.close()
@@ -44,7 +44,7 @@ local Lines = ReadFile(Map)
 local Symbol
 if type == "button" then Symbol = "b" elseif type == "text" then Symbol = "t" elseif type == "image" then Symbol = "i" elseif type == "input" then Symbol = "s" end
 for i = 1, h do
-    Lines[y+i] = string.sub(Lines[y+i],1,x-1)..string.rep(Symbol,w)..string,sub(Lines[y+i],x+(w-1),string.len(Lines[y+i]))
+    Lines[y+i] = string.sub(Lines[y+i],1,x-1)..string.rep(Symbol,w)..string.sub(Lines[y+i],x+(w-1),string.len(Lines[y+i]))
 end
 Lines[#Lines+1] = textutils.serialize({id,type,path,x,y,w,h,true},{compact=true})
 local file = fs.open(fs.combine(Dir,Map..".bit"),"w")
@@ -64,6 +64,6 @@ end
 function boot()
 local List = fs.list(Dir)
 for i = 1, #List do
-    fs.delete(fs.combine(Dir,List))
+    fs.delete(fs.combine(Dir,List[i]))
 end
 end
