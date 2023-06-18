@@ -182,6 +182,7 @@ while true do
         Windows[I][7] = b - Windows[I][5]
         Windows[I][8] = c - Windows[I][7]
         cleanWin()
+        drawWindows()
     end
 end
 end
@@ -197,9 +198,10 @@ while true do
         Windows[I][5], Windows[I][6] = b - x2,c
         x, y = b, c
         cleanWin()
+        drawWindows()
     end
 end
-if x == Windows[I][5] + Windows[I][7] and y == Windows[I][6] then Windows[I] = nil end
+if x == Windows[I][5] + (Windows[I][7]-1) and y == Windows[I][6] then Windows[I] = nil end
 end
  
 function CheckWindows(x,y)--need to update Window Interaction Variables
@@ -224,12 +226,14 @@ if Found == false then
             if x >= Windows[i][5] and x <= Windows[i][5] + Windows[i][7] and y >= Windows[i][6] + 1 and y <= Windows[i][6] + Windows[i][8] then
                 --checks slaved entities to see if they were clicked
             end
-            if x == (X1 + (W1-1)) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true cleanWin() drawWindows() end --used to see if user clicked minimized button
-            if x == (X1 + (W1-1)) - 1 and y == Windows[i][6] then
+            if x == (X1 + W1) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true cleanWin() drawWindows() end --used to see if user clicked minimized button
+            if x == (X1 + W1) - 1 and y == Windows[i][6] then
                 if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
                 Found = true
+                cleanWin()
+                drawWindows()
             end
-            if x == X1 + (W1-1) and y == Y1 then Windows[i] = nil Found = true cleanWin() drawWindows() end
+            if x == X1 + W1 and y == Y1 then Windows[i] = nil Found = true cleanWin() drawWindows() end
  
         else
             if x >= I and x <= I + 2 and y >= h - 2 then Windows[i][4][2] = true Found = true end
