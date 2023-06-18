@@ -24,19 +24,20 @@ end
 
 function checkCollision(Map,x,y)
 local Lines = ReadFile(Map)
+local RE = false
+local Res = {}
 if string.sub(Lines[y+1],x,x) ~= "x" then
-    local Res = {}
     local settings = textutils.unserialize(Lines[1])
     local h = settings[4]
-    for i = h+1, #Lines-h do
+    for i = h, #Lines-h do
         local Det = textutils.unserialize(Lines[i])
         local X1, Y1 = settings[1]+Det[4],settings[2]+Det[5]
         local X2,Y2 = X1+(Det[6]-1), Y1+(Det[7]-1)
         if (x>= X1 and x <= X2) and (y >= Y1 and y <= Y2) then Res = {Det[1],Det[2],Det[3]} end
     end
-    if Res[1] == nil then Res = false end
-    return Res
+    if Res[1] == nil then RE = false else RE = true end
 end
+return RE, Res
 end
 
 function addObject(Map,id,type,path,x,y,w,h)
