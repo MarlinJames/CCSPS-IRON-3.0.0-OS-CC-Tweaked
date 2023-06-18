@@ -38,7 +38,7 @@ end
 
 local function getReadableTextColor(K)
 local C
-local CL = {{"0",colors.black},{"1",colors.white},{"2",colors.white},{"3",colors.white},{"4",colors.red},{"5",colors.black},{"6",colors.white},{"7",colors.white},{"8",colors.white},{"9",colors.white},{"a",colors.white},{"b",colors.white},{"c",colors.white},{"d",colors.white},{"e",colors.yellow},{"f",colors.white}}
+local CL = {{"0","f"},{"1","0"},{"2","0"},{"3",colors.white},{"4",colors.red},{"5",colors.black},{"6",colors.white},{"7",colors.white},{"8",colors.white},{"9","0"},{"a","0"},{"b","0"},{"c","0"},{"d","0"},{"e","4"},{"f","0"}}
 for i = 1, #CL do
     if K == CL[i][1] then C = CL[i][2] end
 end
@@ -61,6 +61,7 @@ function DrawScreen()
 end
 
 function UpdateScreen()
+term.clear()
 CombineLayers_D()
 --gave other one job of combining text as well.
 local x = 1
@@ -74,19 +75,17 @@ local Color = colors.black
 local Char = " "
 local SavedC = {{}}
 repeat
-    if string.sub(Line,x,x) ~= "x" then
-        Color = GetColor(string.sub(Line,x,x))
-        term.setCursorPos(x,y)
-        term.setBackgroundColor(Color)
-        term.setTextColor(Color)
-    end
+    Color = GetColor(string.sub(Line,x,x))
+    term.setCursorPos(x,y)
+    term.setBackgroundColor(Color)
+    term.setTextColor(Color)
     SavedC[y][x] = string.sub(Line,x,x)
     if y==h and x==w then y = -1 elseif x == w then x = 1 y = y + 1 Line = file.readLine() SavedC[y] = {} else x = x + 1 end
 until y == -1
 x, y = 1, 1
 Line = file.readLine()
 repeat
-    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) term.blitz(TX[1],getReadAbleColor(SavedC[y][x]),SavedC[y][x]) Line = file.readLine() end
+    if Line ~= nil then local TX = textutils.unserialize(Line) x, y = TX[2], TX[3] term.setCursorPos(x,y) term.blit(TX[1],getReadableTextColor(SavedC[y][x])),tostring(SavedC[y][x])) Line = file.readLine() end
 until Line == nil
 file.close()
 end
