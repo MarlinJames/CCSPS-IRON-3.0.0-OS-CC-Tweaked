@@ -110,7 +110,6 @@ W.close()
 end
 
 function editText(x,y,l,t,id)
-t = string.sub(t,2,string.len(t)-1)
 local Path = ("os/files/layers/Display_L"..l..".nfp")
 local R = fs.open(Path,"r")
 local line
@@ -125,7 +124,7 @@ local Pass = false
 local P
 for i = h, #LINES do
     local Det = textutils.unserialize(LINES[i])
-    if Det[2] == id then Det[1] = t Pass = true P = iend
+    if Det[2] == id then Det[1] = t Pass = true P = i end
 end
 if Pass == false then P = #LINES +1
 LINES[P]= textutils.serialize({t,id,x,y},{compact=true})
