@@ -242,7 +242,7 @@ if Found == false then
 end
 if Found == false and DesktopDraw == true then
     local RR = bitmap.checkCollision("desktop",x,y)
-    if RR ~= false then shell.run("os/ProgramReader.os",RR[3],"call","onCreation") shell.run("os/ProgramReader.os",RR[3],"call","onStart") end
+    if #RR > 0 then shell.run("os/ProgramReader.os",RR[3],"call","onCreation") shell.run("os/ProgramReader.os",RR[3],"call","onStart") end
 end
 if 1 == 0 then--working on transfering responsibilities to bitmap script
     local X = 2
@@ -405,6 +405,8 @@ Graphics.createLayer(4)
 Graphics.createLayer(5)
 drawDesktop()
 drawShortcuts()
+bitmap.boot()
+bitmap.createMap("desktop",1,1,w,h)
 end
 
 
