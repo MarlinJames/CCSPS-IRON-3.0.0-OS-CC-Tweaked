@@ -362,6 +362,9 @@ function drawWindows()
             --removed gray window outline
             Graphics.drawLine(X1,Y1,W1-3,0,3,"8")
             --need to replace minimize,resize, and close buttons
+            Graphics.editPixel(X1+(W1-1),Y1,3,"e")
+            Graphics.editPixel(X1+(W1-2),Y1,3,"1")
+            Graphics.editPixel(X1+(W1-3),Y1,3,"4")
             Graphics.addText(X1,Y1,3,Windows[i][3])
         end
     end
