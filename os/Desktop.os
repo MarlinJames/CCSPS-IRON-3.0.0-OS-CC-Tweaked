@@ -107,6 +107,8 @@ if E == "application" then
     if a == "load" then
         Windows[#Windows+1]={b,CreateWID(),c,d,1,1,20,20}
         Windows[#Windows][4][3] = true--if window is visible
+        cleanWin()
+        drawFrame()
     elseif a == "data" then
         local ET = c
         local I = #Window_Entities
@@ -179,6 +181,7 @@ while true do
     elseif event == "mouse_drag" then
         Windows[I][7] = b - Windows[I][5]
         Windows[I][8] = c - Windows[I][7]
+        cleanWin()
     end
 end
 end
@@ -193,6 +196,7 @@ while true do
     elseif event == "mouse_drag" then
         Windows[I][5], Windows[I][6] = b - x2,c
         x, y = b, c
+        cleanWin()
     end
 end
 if x == Windows[I][5] + Windows[I][7] and y == Windows[I][6] then Windows[I] = nil end
@@ -341,10 +345,13 @@ for i = 1, #DeskItems do
 end
 end
 end
- 
-function drawWindows()
+
+function cleanWin()
     Graphics.clearLayer(3,"color")
     Graphics.clearLayer(3,"text")
+end
+
+function drawWindows()
     local I = 1
     local Cords = {}
     for i = 1, #Windows do
