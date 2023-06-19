@@ -1,0 +1,25 @@
+--will be used to give Graphics text edit commands based off contects of given bitmap file
+local Dir = "os/files/bitmaps"
+--bitmap settings: screenx,screeny,mapwidth,mapheight,active
+
+
+local function ReadFile(id)
+local file = fs.open(fs.combine(Dir,id..".bit"),"r")
+local Lines = {}
+local Line
+repeat
+    Line = file.readLine()
+    if Line ~= nil then Lines[#Lines+1] = Line end
+until Line == nil
+file.close()
+return Lines
+end
+
+function drawText(map)
+local Content = ReadFile(map)
+local settings = textutils.unserialize(Content[1])
+for i = settings[4]+1, #Content do
+    if Content[i] ~= nil then local Da = textutils.unserialize(Content[i]) if Da[2] == "text" then Graphics.editText(Da[4],Da[5],3,Da[3],Da[1]) end end
+
+end
+end
