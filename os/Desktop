@@ -223,8 +223,7 @@ for i = 1, #Items do
 end
 --Redo this /\
 if Found == false then
-    local Win = Windows.checkWindow(x,y,"mouse_click")
-    if Win[1] == true then Found = true end
+    Found = TWindows.checkWindow(x,y,"mouse_click")
 elseif 1==0 and Found == false and #Windows > 0 then
     local W = 1
     repeat
@@ -255,7 +254,7 @@ elseif 1==0 and Found == false and #Windows > 0 then
 end
 if Found == false and DesktopDraw == true then
     local RR = bitmap.checkCollision("desktop",x,y)
-    --if #RR > 0 then shell.run("os/ProgramReader.os",RR[3],"call","onCreation") shell.run("os/ProgramReader.os",RR[3],"call","onStart") end
+    if #RR > 0 and RR[1] ~= "background" then TWindows.createWindow(RR[3]) end
 end
 if 1 == 0 then--working on transfering responsibilities to bitmap script
     local X = 2
