@@ -109,6 +109,9 @@ if E == "application" then
         Windows[#Windows][4][3] = true--if window is visible
         cleanWin()
         drawWindows()
+        local WI = "window_"..Windows[#Windows][2]
+        bitmap.createMap(WI,1,1,20,20)
+        bitmap.addObject(WI,"win_exit","button","close",20,1,1,1)
     elseif a == "data" then
         local ET = c
         local I = #Window_Entities
@@ -126,7 +129,7 @@ elseif E == "windowVideoUpdate" then
     Pass = true
 elseif E == "mouse_click" then
     if CheckWindows(b,c) == true then Pass = true end
-elseif E == "mouse_drag" then
+elseif E == "mouse_down" then
     GetDragWindow(b,c)
 elseif E == "modem_message" then
     Notifications[#Notifications + 1] = {"message",b,c,d,e}
@@ -167,7 +170,7 @@ function GetDragWindow(x,y)
 local I = 1
 for i = 1, #Windows do
     if Windows[i][4][3] == true and Windows[i][4][2] == false then
-        if x >= Windows[i][5] + 1 and x < (Windows[i][5] + Windows[i][7]) - 2 and y == Windows[i][6] then DragWindow(i,x,y) elseif y == Windows[i][6] + Windows[i][8] and x == Windows[i][5] + Windows[i][7] then ResizeWindow(i) end
+        if x >= Windows[i][5] + 1 and x < (Windows[i][5] + Windows[i][7]) - 3 and y == Windows[i][6] then DragWindow(i,x,y) elseif y == Windows[i][6] + (Windows[i][8]-1) and x == Windows[i][5] + (Windows[i][7]-1) then ResizeWindow(i) end
     end
 end
 end
@@ -179,11 +182,12 @@ while true do
         break
     elseif event == "mouse_drag" then
         Windows[I][7] = b - Windows[I][5]
-        Windows[I][8] = c - Windows[I][7]
+        Windows[I][8] = c - Windows[I][6]
         cleanWin()
         drawWindows()
     end
 end
+bitmap.editMap("window_"..I,Windows[I][5],Windows[I][6],Windows[I][7],Windows[I][8])
 end
  
 function DragWindow(I,x1,y1)
@@ -200,6 +204,7 @@ while true do
         drawWindows()
     end
 end
+bitmap.editMap("window_"..I,Windows[I][5],Windows[I][6],Windows[I][7],Windows[I][8])
 if x == Windows[I][5] + (Windows[I][7]-1) and y == Windows[I][6] then Windows[I] = nil end
 end
  
@@ -217,32 +222,36 @@ for i = 1, #Items do
     I = I + 5
 end
 --Redo this /\
-if Found == false then
-    for i = 1, #Windows do
-        if Windows[i][4][3] == true then--if window is visable
-            local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
-            if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end
-            if x >= Windows[i][5] and x <= Windows[i][5] + Windows[i][7] and y >= Windows[i][6] + 1 and y <= Windows[i][6] + Windows[i][8] then
+if Found == false and #Windows > 0 then
+    local W = 1
+    repeat
+        local WI = "window_"..tostring(Windows[W][2])
+        if Windows[W][4][3] == true then--if window is visable
+            local button = bitmap.checkCollision(WI,x,y)
+            if button[1] ~= nil then Found = true end
+            local X1, Y1, W1, H1 = Windows[W][5], Windows[W][6], Windows[W][7], Windows[W][8]
+            if Windows[W][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end
+            if x >= Windows[W][5] and x <= Windows[W][5] + Windows[W][7] and y >= Windows[W][6] + 1 and y <= Windows[W][6] + Windows[W][8] then
                 --checks slaved entities to see if they were clicked
             end
-            if x == (X1 + W1) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true cleanWin() drawWindows() end --used to see if user clicked minimized button
-            if x == (X1 + W1) - 1 and y == Windows[i][6] then
-                if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
-                Found = true
-                cleanWin()
-                drawWindows()
-            end
-            if x == X1 + W1 and y == Y1 then Windows[i] = nil Found = true cleanWin() drawWindows() end
+            --if x == (X1 + W1) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true cleanWin() drawWindows() end --used to see if user clicked minimized button
+            --if x == (X1 + W1) - 1 and y == Windows[i][6] then
+                --if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
+                --Found = true
+                --cleanWin()
+                --drawWindows()
+            --end
+            if button[3] =="close" then bitmap.deleteMap(WI) table.remove(Windows,W) cleanWin() drawWindows() end
  
         else
             if x >= I and x <= I + 2 and y >= h - 2 then Windows[i][4][2] = true Found = true end
             I = I + 5
         end
-    end
+        W = W + 1
+    until Found == true or W >= #Windows
 end
 if Found == false and DesktopDraw == true then
     local RR = bitmap.checkCollision("desktop",x,y)
-    Graphics.editText(RR[1],"debug2",4,5,5)
     if #RR > 0 then shell.run("os/ProgramReader.os",RR[3],"call","onCreation") shell.run("os/ProgramReader.os",RR[3],"call","onStart") end
 end
 if 1 == 0 then--working on transfering responsibilities to bitmap script
@@ -344,11 +353,12 @@ for i = 1, #Windows do
     if Windows[i][4][3] == true and Windows[i][4][2] == true then DesktopDraw = false end
 end
 if DesktopDraw == true then
-Graphics.clearLayer(2,"color")
+Graphics.clearLayer(2)
 local y = 2
 local x = 2
 for i = 1, #DeskItems do
     Graphics.drawBox(x,y,3,3,2,9)
+    bitmap.addObject("desktop",DeskItems[i][1],"button",DeskItems[i][2],x,y,3,3)
     if x + 8 < w then x = x + 6 else x = 2 y = y + 5 end
 end
 end
@@ -404,10 +414,11 @@ Graphics.createLayer(2)
 Graphics.createLayer(3)
 Graphics.createLayer(4)
 Graphics.createLayer(5)
-drawDesktop()
-drawShortcuts()
 bitmap.boot()
 bitmap.createMap("desktop",1,1,w,h)
+drawDesktop()
+drawShortcuts()
+
 end
 
 
