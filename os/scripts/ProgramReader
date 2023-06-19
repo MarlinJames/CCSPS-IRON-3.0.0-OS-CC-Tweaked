@@ -120,7 +120,7 @@ if Pass == false then
     Res = {"failed","unsupported file"}
 elseif type == "call" then
     for i = 1, #callbacks do
-        if command == callbacks[i][1] then if command == "onCreation" then Res = {callbacks[i][4],{callbacks[i][2],callbacks[i][3]}} elseif command == "onStart" then os.queueEvent("application","data",script,entities) elseif command == "onInteraction" then runFunct(callbacks[i][3]) end end
+        if command == callbacks[i][1] then if command == "onCreation" then Res = {callbacks[i][4],{callbacks[i][2],callbacks[i][3]}} elseif command == "onStart" then Res = entities elseif command == "onInteraction" then runFunct(callbacks[i][3]) error("!") end end
     end
 end
 return Res[1],Res[2],Res[3],Res[4]

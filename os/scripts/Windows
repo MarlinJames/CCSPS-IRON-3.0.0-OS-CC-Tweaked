@@ -3,11 +3,12 @@ local file = fs.open("os/files/windows.txt","r")
 local Data = {}
 local Line
 local I = 0
+local DT = {}
 repeat
     I = I + 1
     Line = file.readLine()
-    local DT = textutils.unserialize(Line)
-until DT[2] == id
+    DT = assert(textutils.unserialize(Line))
+until Line == nil or tostring( DT[2]) == id
 Data = textutils.unserialize(Line)
 file.close()
 return Data
@@ -34,27 +35,39 @@ for i = 1, #Lines do
     file.writeLine(Lines[i])
 end
 file.close()
-bitmap.deleteMap("windows_"..id)
-RedrawWindows()
+bitmap.deleteMap("window_"..id)
+if fs.getSize("os/files/windows.txt") < 2 then fs.delete("os/files/windows.txt") Graphics.clearLayer(3) Graphics.UpdateScreen() else RedrawWindows() end
+end
+
+function UpdateWindowSettings(I,b)
+
 end
 
 function createWindow(script)
-local Name, settings = ProgramReader.Execute(script,"call","onCreation")
-local ID = math.ran(1,1000)
+local Name, settings = ProgramReader.execute(script,"call","onCreation")
+local ID = math.random(1,1000)
 local Win = "window_"..ID
 createWin(script,ID,Name,1,1,20,20)
 bitmap.createMap(Win,1,1,20,20)
 bitmap.addObject(Win,"win_close","button","exit",20,1,1,1)
+bitmap.addObject(Win,"win_max","button","fullscreen",19,1,1,1)
+bitmap.addObject(Win,"win_min","button","shrink",18,1,1,1)
+bitmap.addObject(Win,"win_dragbar","button","drag",1,1,17,1)
+bitmap.addObject(Win,"win_size","button","resize",20,20,1,1)
+local ENTs = ProgramReader.execute(script,"call","onStart")
+if ENTs ~= nil then for i = 1, #ENTs do bitmap.addObject(Win,ENTs[i][1],ENTs[i][2],ENTs[i][3],ENTs[i][4],ENTs[i][7],ENTs[i][8],ENTs[i][5],ENTs[i][6]) end end
+
+RedrawWindows()
 end
 
 function RedrawWindows()
-Graphics.cleanLayer(3)
+Graphics.clearLayer(3)
 local file = fs.open("os/files/windows.txt","r")
 local data = {}
 local Line
 repeat
     Line = file.readLine()
-    if Line ~= nil then data = textutils.unserialize(Line) Graphics.drawBox(data[4],data[5]+1,data[6],data[7]-1,3,"0") Graphics.drawLine(data[4],data[5],data[6]-3,0,3,"7") Graphics.editPixel(data[4]+data[6]-1,data[5],3,"e") Graphics.editText(data[4],data[5],3,data[3],"win_title") end
+    if Line ~= nil then data = textutils.unserialize(Line) Graphics.drawBox(data[4],data[5]+1,data[6],data[7]-1,3,"0") Graphics.drawLine(data[4],data[5],data[6]-3,0,3,"7") Graphics.editPixel(data[4]+data[6]-1,data[5],3,"e") Graphics.editText(data[4],data[5],3,data[3],"win_title") Graphics.editPixel(data[4]+data[6]-2,data[5],3,"1") Graphics.editPixel(data[4]+data[6]-3,data[5],3,"4") end
 until Line == nil
 
 file.close()
@@ -65,10 +78,19 @@ function checkWindow(x,y,event)
 local List = fs.list("os/files/bitmaps")
 local Found = false
 for i = 1, #List do
-    if Found == false and string.find(List[i],"window_") ~= nil then
-        local Details = getWindowData(string.sub(List[i],8,string.len(List[i])-3))
-        local button = bitmap.checkCollision(string.sub(List[i],1,string.len(List[i])-4))
+    if fs.exists("os/files/windows.txt") and Found == false and string.sub(List[i],1,7) == "window_" then
+        local Details = getWindowData(string.sub(List[i],8,string.len(List[i])-4))
+        local button = bitmap.checkCollision(string.sub(List[i],1,string.len(List[i])-4),x,y)
         if button[1] == "win_close" then Found = true deleteWin(Details[2]) end
+        if button[1] == "background" then Found = true end
+        if button[1] == "win_max" then UpdateWindowSettings(2,true) end
+        if button[1] == "win_min" then Found = true end
+        if button[1] == "win_size" then Found = true end
+        if button[1] == "win_dragbar" then end
+        if Found == false and button ~= nil then Found = true ProgramReader.execute(Details[1],"call","onInteract") end
     end
 end
+return Found
 end
+
+function boot() fs.delete("os/files/windows.txt") end
