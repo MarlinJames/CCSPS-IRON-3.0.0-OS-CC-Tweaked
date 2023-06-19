@@ -127,12 +127,12 @@ end
 function CheckWindows(x,y)--need to update Window Interaction Variables
 local I = 3
 --need to replace check taskbar
-Found = TWindows.checkWindow(x,y,"mouse_click")
+Found = Windows.checkWindow(x,y,"mouse_click")
 if Found == false and DesktopDraw == true then
     local RR = bitmap.checkCollision("desktop",x,y)
-    if #RR > 0 and RR[1] ~= "background" then TWindows.createWindow(RR[3]) end
+    if #RR > 0 and RR[1] ~= "background" then Windows.createWindow(RR[3]) end
 end
-if Found == true then UpdateScreen() end
+if Found == true then Graphics.UpdateScreen() end
 return Found
 end
  
@@ -172,7 +172,7 @@ Graphics.drawBox(1,h,w,1,4,"8")
 local x = 3
 local Tabs = {}
 for i = 1, #Items do
-    Graphics.drawBox(x, h -2, 2, 3,4, "0")
+   Graphics.drawBox(x, h -2, 2, 3,4, "0")
     Tabs[i] = 0
     x = x + 5
 end
@@ -185,6 +185,7 @@ for i = 1, #Tabs do
         term.write(Tabs[i])
     end
     x = x + 5
+end
 end
 end
  
@@ -220,7 +221,6 @@ end
 end
 
 function drawFrame()
-if Layers[3] == true then drawWindows() end
 if Layers[4] == true then drawTaskbar() end
 if Layers[5] == true then if Popup[1] == true then DrawPopup() end end
 Graphics.UpdateScreen()
