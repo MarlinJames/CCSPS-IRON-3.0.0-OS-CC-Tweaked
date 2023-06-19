@@ -1,0 +1,51 @@
+local function getWindowData(i)
+local file = fs.open("os/files/windows.txt","r")
+local Data = {}
+local Line
+local I = 0
+repeat
+    I = I + 1
+    Line = file.readLine()
+until I == i
+Data = textutils.unserialize(Line)
+file.close()
+return Data
+end
+
+local function createWin(script,id,name,x,y,w,h)
+local file = fs.open("os/files/windows.txt","a")
+file.writeLine(textutils.serialize({script,id,name,x,y,w,h,{true,false,true}},{compact=true}))
+file.close()
+end
+
+local function deleteWin(id)
+local file = fs.open("os/files/windows.txt","r")
+
+local Line
+local Lines = {}
+repeat
+    Line = file.readLine()
+    if Line ~= nil then local Data = textutils.unserialize(Line) if Data[2] == id then else Lines[#Lines+1] = Line end end
+until Line == nil
+file.close()
+file = fs.open("os/files/windows.txt","w")
+for i = 1, #Lines do
+    file.writeLine(Lines[i])
+end
+file.close()
+end
+
+function createWindow(script)
+
+end
+
+function checkWindow(x,y,event)
+local List = fs.list("os/files/bitmaps")
+local Found = false
+for i = 1, #List do
+    if Found == true and string.find(List[i],"window_") ~= nil then
+        local button = bitmap.checkCollision(string.sub(List[i],1,string.len(List[i])-4))
+        if button[1] == "win_close" then Found = true closeWindow(
+    end
+end
+end
