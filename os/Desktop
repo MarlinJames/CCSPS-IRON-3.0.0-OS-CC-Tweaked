@@ -223,7 +223,7 @@ for i = 1, #Items do
 end
 --Redo this /\
 if Found == false then
-    local Win = Windows.checkWindows(x,y,"mouse_click")
+    local Win = Windows.checkWindow(x,y,"mouse_click")
     if Win[1] == true then Found = true end
 elseif 1==0 and Found == false and #Windows > 0 then
     local W = 1
