@@ -196,10 +196,10 @@ end
 file.close()
 end
 
-function clearLayer(l,type)--will create new layer file full of spaces
+function clearLayer(l)--will create new layer file full of spaces
 local path
 local file
-if type == "text" then path = ("os/files/textLayers/Display_T"..l..".txt") elseif type == "color" then path = ("os/files/layers/Display_L"..l..".nfp") end
+path = ("os/files/layers/Display_L"..l..".nfp")
 file = fs.open(path,"w")
 
 for i = 1, h do
