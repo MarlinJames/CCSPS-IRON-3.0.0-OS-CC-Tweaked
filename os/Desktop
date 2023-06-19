@@ -2,8 +2,7 @@ local FilePath
 local UserPath
 local ShortcutsPath
 local DocumentsPath
- 
-local Windows = {}--script,id,title,settings,x,y,w,h
+
 local Items = {}
 local DeskItems = {}
 local Notifications = {}
@@ -82,12 +81,6 @@ end
  
 end
 
-function CreateWID()
-local T = 1
-if #Windows > 0 then T = Windows[#Windows][2] + 1 end
-return T
-end
-
 function OpenPopup(x,y,details)
 local Options = {}
 if details[2] == "file" then
@@ -99,30 +92,8 @@ end
 function CheckEvent(E,a,b,c,d,e,f)
 local i
 Pass = false
-for j = 1, #Windows do
-    if Windows[j][1] == a then i = j end
-end
-if E == "application" then
-    Pass = true
-    if a == "load" then
-        Windows[#Windows+1]={b,CreateWID(),c,d,1,1,20,20}
-        Windows[#Windows][4][3] = true--if window is visible
-        cleanWin()
-        drawWindows()
-        local WI = "window_"..Windows[#Windows][2]
-        bitmap.createMap(WI,1,1,20,20)
-        bitmap.addObject(WI,"win_exit","button","close",20,1,1,1)
-    elseif a == "data" then
-        local ET = c
-        local I = #Window_Entities
-        for i = 1, #ET do
-            Window_Entities[I+i] = {}
-        end
-    elseif a == "request" then
-
-    end
-elseif E == "windowFullscreen" then
-    if b == true then FullScreen = true Windows[i][4][2] = true end
+if E == "windowFullscreen" then
+    if b == true then FullScreen = true end
     Pass = true
 elseif E == "windowVideoUpdate" then
     --UpdateItem(i,b,"video",c)
@@ -153,129 +124,15 @@ while true do
 end
 end
  
-function UpdateItem(win,item,set,t)
-local I = 3
-local J
-if set == "video" then
-    I = 3
-end
-for i = 1, #Windows[win][5] do
-    if Windows[win][5][i][2] == item then J = i end
-end
-Windows[win][5][J][I] = set
-end
- 
-function GetDragWindow(x,y)
- 
-local I = 1
-for i = 1, #Windows do
-    if Windows[i][4][3] == true and Windows[i][4][2] == false then
-        if x >= Windows[i][5] + 1 and x < (Windows[i][5] + Windows[i][7]) - 3 and y == Windows[i][6] then DragWindow(i,x,y) elseif y == Windows[i][6] + (Windows[i][8]-1) and x == Windows[i][5] + (Windows[i][7]-1) then ResizeWindow(i) end
-    end
-end
-end
- 
-function ResizeWindow(I)
-while true do
-    local event, a, b, c = os.pullEvent()
-    if event == "mouse_up" then
-        break
-    elseif event == "mouse_drag" then
-        Windows[I][7] = b - Windows[I][5]
-        Windows[I][8] = c - Windows[I][6]
-        cleanWin()
-        drawWindows()
-    end
-end
-bitmap.editMap("window_"..I,Windows[I][5],Windows[I][6],Windows[I][7],Windows[I][8])
-end
- 
-function DragWindow(I,x1,y1)
-local x, y
-local x2 = x1 - Windows[I][5]
-while true do
-    local event, a, b, c = os.pullEvent()
-    if event == "mouse_up" then
-        break
-    elseif event == "mouse_drag" then
-        Windows[I][5], Windows[I][6] = b - x2,c
-        x, y = b, c
-        cleanWin()
-        drawWindows()
-    end
-end
-bitmap.editMap("window_"..I,Windows[I][5],Windows[I][6],Windows[I][7],Windows[I][8])
-if x == Windows[I][5] + (Windows[I][7]-1) and y == Windows[I][6] then Windows[I] = nil end
-end
- 
 function CheckWindows(x,y)--need to update Window Interaction Variables
 local I = 3
---need to redo Items\/
-local Found = false
-for i = 1, #Items do
-    if x >= I and x <= I + 2 and y >= h - 2 then
-        for t = 1, #Windows do
-            if Windows[t][1] == Items[i][2] then Windows[t][4] = true Found = true end
-        end
-        if Found == false then Found = true shell.run("os/ProgramReader.os",Items[i][2],"onCreation") end
-    end
-    I = I + 5
-end
---Redo this /\
-if Found == false then
-    Found = TWindows.checkWindow(x,y,"mouse_click")
-elseif 1==0 and Found == false and #Windows > 0 then
-    local W = 1
-    repeat
-        local WI = "window_"..tostring(Windows[W][2])
-        if Windows[W][4][3] == true then--if window is visable
-            local button = bitmap.checkCollision(WI,x,y)
-            if button[1] ~= nil then Found = true end
-            local X1, Y1, W1, H1 = Windows[W][5], Windows[W][6], Windows[W][7], Windows[W][8]
-            if Windows[W][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end
-            if x >= Windows[W][5] and x <= Windows[W][5] + Windows[W][7] and y >= Windows[W][6] + 1 and y <= Windows[W][6] + Windows[W][8] then
-                --checks slaved entities to see if they were clicked
-            end
-            --if x == (X1 + W1) - 2 and y == Y1 and Windows[i][4][1] == true then Windows[i][4][3] = false Found = true cleanWin() drawWindows() end --used to see if user clicked minimized button
-            --if x == (X1 + W1) - 1 and y == Windows[i][6] then
-                --if Windows[i][4][2] == true then Windows[i][4][2] = false else Windows[i][4][2] = true end
-                --Found = true
-                --cleanWin()
-                --drawWindows()
-            --end
-            if button[3] =="close" then bitmap.deleteMap(WI) table.remove(Windows,W) cleanWin() drawWindows() end
- 
-        else
-            if x >= I and x <= I + 2 and y >= h - 2 then Windows[i][4][2] = true Found = true end
-            I = I + 5
-        end
-        W = W + 1
-    until Found == true or W >= #Windows
-end
+--need to replace check taskbar
+Found = TWindows.checkWindow(x,y,"mouse_click")
 if Found == false and DesktopDraw == true then
     local RR = bitmap.checkCollision("desktop",x,y)
     if #RR > 0 and RR[1] ~= "background" then TWindows.createWindow(RR[3]) end
 end
-if 1 == 0 then--working on transfering responsibilities to bitmap script
-    local X = 2
-    local Y = 2
-    local Blocked = false
-    for i = 1, #DeskItems do
-        Blocked = false
-        for i2 = 1, #Windows do
-            if X >= Windows[i2][5] and X <= Windows[i2][5] + Windows[i2][7] and Y >= Windows[i2][6] and Y <= Windows[i2][6] + Windows[i2][8] then Blocked = true end
-        end
-        if x >= X and x <= X + 3 and y >= Y and y <= Y + 3 and Blocked == false then Found = true shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onCreation") shell.run("os/ProgramReader.os",DeskItems[i][2],"call","onStart") end
-        if X + 8 < w then X = X + 6 else X = 2 Y = Y + 5 end
-    end
-end
-Found = true
-if Found == false then
-    for i = 1, #Buttons do
-        --if y == Windows[Buttons[i][1]][2][2] + Buttons[i][5] and x >= Windows[Buttons[i][1]][2][1] + Buttons[i][4] and x <= Windows[Buttons[i][1]][2][1] + Buttons[i][4] + 5 then shell.run("os/ProgramReader.os","call",CA,Window_Entities[i][1],"click") end
-    end
-end
-if Found == true then drawFrame() end
+if Found == true then UpdateScreen() end
 return Found
 end
  
@@ -320,18 +177,7 @@ for i = 1, #Items do
     x = x + 5
 end
 local Found = false
-for i = 1, #Windows do
-    Found = false
-    if Windows[i][4][3] == false then
-        for I = 1, #Items do
-            if Windows[i][1] == Items[I][1] then Tabs[I] = Tabs[I] + 1 Found = true end
-        end
-        if Found == false then
-            Graphics.drawBox(x, h-2,2, 3, 4,"4")
-            x = x + 5
-        end
-    end
-end
+--need to replace section that displays miminized windows on task bar
 x = 3
 for i = 1, #Tabs do
     term.setCursorPos(x, h)
@@ -339,9 +185,6 @@ for i = 1, #Tabs do
         term.write(Tabs[i])
     end
     x = x + 5
-end
-if #Notifications > 0 then paintutils.drawPixel(w,h,colors.red) end
-term.setBackgroundColor(colors.black)
 end
 end
  
@@ -351,9 +194,6 @@ end
 
 function drawShortcuts()
 DesktopDraw = true
-for i = 1, #Windows do
-    if Windows[i][4][3] == true and Windows[i][4][2] == true then DesktopDraw = false end
-end
 if DesktopDraw == true then
 Graphics.clearLayer(2)
 local y = 2
@@ -364,30 +204,6 @@ for i = 1, #DeskItems do
     if x + 8 < w then x = x + 6 else x = 2 y = y + 5 end
 end
 end
-end
-
-function cleanWin()
-    Graphics.clearLayer(3,"color")
-    Graphics.clearLayer(3,"text")
-end
-
-function drawWindows()
-    local I = 1
-    local Cords = {}
-    for i = 1, #Windows do
-        if Windows[i][4][3] == true then
-            local X1, Y1, W1, H1 = Windows[i][5], Windows[i][6], Windows[i][7], Windows[i][8]
-            if Windows[i][4][2] == true then X1 = 1 Y1 = 1 W1 = w - 1 H1 = h - 2 end--need to make cooperate with windows settings
-            Graphics.drawBox(X1,Y1+1,W1,H1,3,"0")
-            --removed gray window outline
-            Graphics.drawLine(X1,Y1,W1-3,0,3,"8")
-            --need to replace minimize,resize, and close buttons
-            Graphics.editPixel(X1+(W1-1),Y1,3,"e")
-            Graphics.editPixel(X1+(W1-2),Y1,3,"1")
-            Graphics.editPixel(X1+(W1-3),Y1,3,"4")
-            Graphics.editText(X1,Y1,3,Windows[i][3],Windows[i][2].."_text")
-        end
-    end
 end
  
 function VideoPlayer(Window,Item)
