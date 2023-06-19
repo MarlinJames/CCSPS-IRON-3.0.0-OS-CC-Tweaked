@@ -40,7 +40,7 @@ if x>= DI[1] and x<= DI[3] and y>= DI[2] and y<= DI[4] then
         local X2, Y2 = Det[4]+(Det[6]-1),Det[5]+(Det[7]-1)
         if (x>= X1 and x <= X2) and (y >= Y1 and y <= Y2) then Res = {Det[1],Det[2],Det[3]} end
     end
-    if Res[1] == nil then RE = false else RE = true end
+    if Res[1] == nil then Res[1] = "background" end
 end
 return Res
 end

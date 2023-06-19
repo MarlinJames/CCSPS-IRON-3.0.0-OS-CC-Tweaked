@@ -96,7 +96,7 @@ until string.find(line,"%,",ARGS[I-1]+1) == nil
 entities[#entities+1] = ARGS
 end
  
-local function ReadScript()
+local function ReadScript(script)
 local file = fs.open(script,"r")
 local Line
 repeat
@@ -115,15 +115,15 @@ end
 function execute(script,type,command)
 local Pass = true
 local Res = {}
-if string.sub(script,string.len(script)-3,string.len(script)) == ".prg" then ReadScript() else Pass = false end
+if string.sub(script,string.len(script)-3,string.len(script)) == ".prg" then ReadScript(script) else Pass = false end
 if Pass == false then
-    Res = {"failed",unsupported file"}
+    Res = {"failed","unsupported file"}
 elseif type == "call" then
     for i = 1, #callbacks do
-        if command == callbacks[i][1] then if command == "onCreation" then os.queueEvent("application","load",script,callbacks[i][4],{callbacks[i][2],callbacks[i][3]}) elseif command == "onStart" then os.queueEvent("application","data",script,entities) elseif command == "onInteraction" then runFunct(callbacks[i][3]) end end
+        if command == callbacks[i][1] then if command == "onCreation" then Res = {callbacks[i][4],{callbacks[i][2],callbacks[i][3]}} elseif command == "onStart" then os.queueEvent("application","data",script,entities) elseif command == "onInteraction" then runFunct(callbacks[i][3]) end end
     end
 end
-return Res
+return Res[1],Res[2],Res[3],Res[4]
 end
 
 
