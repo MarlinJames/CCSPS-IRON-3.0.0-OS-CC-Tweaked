@@ -18,8 +18,8 @@ end
 function drawText(map)
 local Content = ReadFile(map)
 local settings = textutils.unserialize(Content[1])
-for i = settings[4]+1, #Content do
-    if Content[i] ~= nil then local Da = textutils.unserialize(Content[i]) if Da[2] == "text" then Graphics.editText(Da[4],Da[5],3,Da[3],Da[1]) end end
+for i = settings[4]+2, #Content do
+    if Content[i] ~= nil then local Da = textutils.unserialize(Content[i]) if Da[2] == "text" then Graphics.editText(Da[4],Da[5],3,Da[3],Da[1]) elseif Da[2] == "image" then Graphics.addImage(Da[4],Da[5],3,Da[3]) end end
 
 end
 end

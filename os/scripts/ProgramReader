@@ -94,7 +94,7 @@ repeat
     I = I + 1
 until string.find(line,"%,",ARGS[I-1]+1) == nil
 local LE = {}
-for i = 2, #ARGS do
+for i = 2, #ARGS-1 do
     LE[i-1] = string.sub(line,ARGS[i-1]+1,ARGS[i]-1)
 end
 LE[5] = tonumber(LE[5])
@@ -113,7 +113,7 @@ repeat
         for i = 1, #Calls do
             if string.find(Line,Calls[i]) ~= nil then ReadCallBack(Line) end
         end
-        if string.find(Line,"entity.add") ~= nil then ReadEntity(Line) end
+        if string.sub(Line,1,10) == "entity.add" then ReadEntity(Line) end
         if string.find(Line,"funct.") ~= nil then ReadFunction(Line) end
     end
 until Line == "==end=="
@@ -128,7 +128,7 @@ if Pass == false then
     Res = {"failed","unsupported file"}
 elseif type == "call" then
     for i = 1, #callbacks do
-        if command == callbacks[i][1] then if command == "onCreation" then Res = {callbacks[i][4],{callbacks[i][2],callbacks[i][3]}} elseif command == "onStart" then Res = {#entities,entities} elseif command == "onInteraction" then error("!?!") runFunct(callbacks[i][3]) end end
+        if command == callbacks[i][1] then if command == "onCreation" then Res = {callbacks[i][4],{callbacks[i][2],callbacks[i][3]}} elseif command == "onStart" then Res = entities elseif command == "onInteraction" then error("!?!") runFunct(callbacks[i][3]) end end
     end
 end
 return Res
