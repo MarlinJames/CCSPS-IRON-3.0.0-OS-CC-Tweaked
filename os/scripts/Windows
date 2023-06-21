@@ -39,10 +39,6 @@ bitmap.deleteMap("window_"..id)
 if fs.getSize("os/files/windows.txt") < 2 then fs.delete("os/files/windows.txt") Graphics.clearLayer(3) Graphics.UpdateScreen() else RedrawWindows() end
 end
 
-function UpdateWindowSettings(I,b)
-
-end
-
 function createWindow(script)
 local Table = ProgramReader.execute(script,"call","onCreation")
 local Name = Table[1]
@@ -80,16 +76,33 @@ local function editWindow(var,arg,id)
 local Data = getWindowData(id)--script,id,name,x,y,w,h,{minimizable,fullscreen,visible}
 --allows changes of location, dimensions, and visibility
 if var == "name" then
-
+    Data[3] = arg
 elseif var == "x" then
-
+    Data[4] = arg
 elseif var == "y" then
-
+    Data[5] = arg
 elseif var == "w" then
-
+    Data[6] = arg
 elseif var == "h" then
-
+    Data[7] = arg
+elseif var == "fullscreen" then
+    Data[8][2] = arg
+elseif var == "visible" then
+    Data[8][3] = arg
 end
+local file = fs.open("os/files/windows.txt","r")
+local Lines = {}
+local line
+repeat
+    line = file.readLine()
+    if line ~= nil then local Set = textutils.unserialize(line) local ID = Set[2] if ID ~= id then Lines[#Lines+1] = line else Lines[#Lines+1] = textutils.serialize(Data) end end
+until line == nil
+file.close()
+file = fs.open("os/files/windows.txt","w")
+for i = 1, #Lines do
+    file.writeLine(Lines[i])
+end
+file.close()
 end
 
 function checkWindow(x,y,event)
@@ -101,7 +114,7 @@ for i = 1, #List do
         local button = bitmap.checkCollision(string.sub(List[i],1,string.len(List[i])-4),x,y)
         if button[1] == "win_close" then Found = true deleteWin(Details[2]) end
         if button[1] == "background" then Found = true end
-        if button[1] == "win_max" then UpdateWindowSettings(2,true) end
+        if button[1] == "win_max" then Found = true then editWindow("fullscreen",true,Details[2]) end
         if button[1] == "win_min" then Found = true editWindow("visible",false,Details[2]) end
         if button[1] == "win_size" then Found = true end
         if button[1] == "win_dragbar" then end
