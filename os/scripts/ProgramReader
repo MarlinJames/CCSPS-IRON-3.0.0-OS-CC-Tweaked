@@ -90,10 +90,18 @@ local function ReadEntity(line)
 local ARGS = {}
 local I = 1
 repeat
-    if I == 1 then ARGS[I] = string.find(line,"%[") else ARGS[I] = string.find(line,"%,",ARGS[I-1]+1) end
+    if I == 1 then ARGS[I] = 11 else ARGS[I] = string.find(line,"%,",ARGS[I-1]+1) end
     I = I + 1
 until string.find(line,"%,",ARGS[I-1]+1) == nil
-entities[#entities+1] = ARGS
+local LE = {}
+for i = 2, #ARGS do
+    LE[i-1] = string.sub(line,ARGS[i-1]+1,ARGS[i]-1)
+end
+LE[5] = tonumber(LE[5])
+LE[6] = tonumber(LE[6])
+LE[7] = tonumber(LE[7])
+LE[8] = tonumber(LE[8])
+entities[#entities+1] = LE
 end
  
 local function ReadScript(script)
@@ -120,10 +128,10 @@ if Pass == false then
     Res = {"failed","unsupported file"}
 elseif type == "call" then
     for i = 1, #callbacks do
-        if command == callbacks[i][1] then if command == "onCreation" then Res = {callbacks[i][4],{callbacks[i][2],callbacks[i][3]}} elseif command == "onStart" then Res = entities elseif command == "onInteraction" then runFunct(callbacks[i][3]) error("!") end end
+        if command == callbacks[i][1] then if command == "onCreation" then Res = {callbacks[i][4],{callbacks[i][2],callbacks[i][3]}} elseif command == "onStart" then Res = {#entities,entities} elseif command == "onInteraction" then error("!?!") runFunct(callbacks[i][3]) end end
     end
 end
-return Res[1],Res[2],Res[3],Res[4]
+return Res
 end
 
 
