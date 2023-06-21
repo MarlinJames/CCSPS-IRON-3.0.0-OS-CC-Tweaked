@@ -75,10 +75,23 @@ until Line == nil
 file.close()
 Graphics.UpdateScreen()
 end
+
 local function editWindow(var,arg,id)
+local Data = getWindowData(id)--script,id,name,x,y,w,h,{minimizable,fullscreen,visible}
 --allows changes of location, dimensions, and visibility
+if var == "name" then
+
+elseif var == "x" then
+
+elseif var == "y" then
+
+elseif var == "w" then
+
+elseif var == "h" then
 
 end
+end
+
 function checkWindow(x,y,event)
 local List = fs.list("os/files/bitmaps")
 local Found = false
@@ -89,7 +102,7 @@ for i = 1, #List do
         if button[1] == "win_close" then Found = true deleteWin(Details[2]) end
         if button[1] == "background" then Found = true end
         if button[1] == "win_max" then UpdateWindowSettings(2,true) end
-        if button[1] == "win_min" then Found = true editWindow("visible",false) end
+        if button[1] == "win_min" then Found = true editWindow("visible",false,Details[2]) end
         if button[1] == "win_size" then Found = true end
         if button[1] == "win_dragbar" then end
         if Found == false and button ~= nil then Found = true ProgramReader.execute(Details[1],"call","onInteract") end
