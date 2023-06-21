@@ -185,6 +185,38 @@ end
 Doc.close()
 end
 
+function drawImage(x,y,l,path,id)
+local X, Y = x, y
+local Path = ("os/files/layers/Display_L"..l..".nfp")
+local R = fs.open(Path,"r")
+local I = fs.open(path,"r")
+local Settings = textutils.unserialize(I.readLine)
+local W, H = Settings[1],Settings[2]
+local line
+local LINES = {}
+repeat
+    line = R.readLine()
+    if line ~= nil then LINES[#LINES + 1] = line end
+until line == nil
+local ILINES = {}
+repeat
+    line = I.readLine()
+    if line ~= nil then ILINES[#ILINES + 1] = line end
+until line == nil
+I.close()
+R.close()
+local Doc = fs.open(Path,"w")
+for i = 1, W*H do
+    local c = string.sub(ILINES[y],x,x)
+    LINES[y] = string.sub(LINES[y],1,x-1)..c..string.sub(LINES[y],x+1,string.len(LINES[y]))
+    if x == X+(W-1) then y = y + 1 x = X else x = x + 1 end
+end
+for i = 1, #LINES do
+    Doc.writeLine(LINES[i])
+end
+Doc.close()
+end
+
 function createLayer(l,fill)--will create new layer file full of spaces
 local file
 local path = ("os/files/layers/Display_L"..l..".nfp")
