@@ -2,14 +2,15 @@ local function getWindowData(id)
 local file = fs.open("os/files/windows.txt","r")
 local Data = {}
 local Line
+local Entry
 local I = 0
 local DT = {}
 repeat
     I = I + 1
     Line = file.readLine()
-    DT = assert(textutils.unserialize(Line))
-until Line == nil or tostring( DT[2]) == id
-Data = textutils.unserialize(Line)
+    if Line~= nil then Entry = Line DT = textutils.unserialize(Line) end
+until Line == nil or (DT ~= nil and DT[2] == id)
+Data = textutils.unserialize(Entry)
 file.close()
 return Data
 end
@@ -53,7 +54,7 @@ bitmap.addObject(Win,"win_min","button","shrink",18,1,1,1)
 bitmap.addObject(Win,"win_dragbar","button","drag",1,1,17,1)
 bitmap.addObject(Win,"win_size","button","resize",20,20,1,1)
 local ENTs = ProgramReader.execute(script,"call","onStart")
-for i = 1, #ENTs do local T = ENTs[i][7] local TH = ENTs[i][8] if ENTs[i][2] == "text" then T = string.len(ENTs[i][3]) TH = 1 else T = 5 TH = 5 end bitmap.addObject(Win,ENTs[i][1],ENTs[i][2],ENTs[i][3],ENTs[i][5],ENTs[i][6],T,TH) end
+for i = 1, #ENTs/2 do local T = ENTs[i][7] local TH = ENTs[i][8] if ENTs[i][2] == "text" then T = string.len(ENTs[i][3]) TH = 1 else T = 5 TH = 5 end bitmap.addObject(Win,ENTs[i][1],ENTs[i][2],ENTs[i][3],ENTs[i][5],ENTs[i][6],T,TH) end
 RedrawWindows()
 end
 
@@ -114,11 +115,11 @@ for i = 1, #List do
         local button = bitmap.checkCollision(string.sub(List[i],1,string.len(List[i])-4),x,y)
         if button[1] == "win_close" then Found = true deleteWin(Details[2]) end
         if button[1] == "background" then Found = true end
-        if button[1] == "win_max" then Found = true then editWindow("fullscreen",true,Details[2]) end
+        if button[1] == "win_max" then Found = true editWindow("fullscreen",true,Details[2]) end
         if button[1] == "win_min" then Found = true editWindow("visible",false,Details[2]) end
         if button[1] == "win_size" then Found = true end
         if button[1] == "win_dragbar" then end
-        if Found == false and button ~= nil then Found = true ProgramReader.execute(Details[1],"call","onInteract") end
+        if Found == false and button ~= nil then error(textutils.serialize(Details)) Found = true ProgramReader.execute(Details[1],"call","onInteract") end
     end
 end
 return Found
