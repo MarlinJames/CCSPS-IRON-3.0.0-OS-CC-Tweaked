@@ -1,0 +1,21 @@
+function newTab(id,path,image)
+local x = (File.getEntities("os/files/taskbar.txt",1)*4)+1
+local Line = textutils.serialize({id,path,image,x},{compact=true})
+File.newLine("os/files/taskbar.txt",Line)
+end
+
+function deleteTab(id)
+File.deleteLine("os/files/taskbar.txt",)
+end
+
+function checkTabs(x,y)
+
+end
+
+function openTab(id)
+
+end
+
+function drawTaskbar()
+
+end
