@@ -100,7 +100,7 @@ end
 
 function deleteObject(Map,id)
 local Lines = ReadFile(Map)
-local Settings = textutils.unserialize(Lines[1]))
+local Settings = textutils.unserialize(Lines[1])
 local Y = Settings[4]+2
 local Data = {}
 local N
