@@ -37,7 +37,7 @@ for i = 1, #Lines do
 end
 file.close()
 bitmap.deleteMap("window_"..id)
-if fs.getSize("os/files/windows.txt") < 2 then fs.delete("os/files/windows.txt") Graphics.clearLayer(3) Graphics.UpdateScreen() else RedrawWindows() end
+if fs.getSize("os/files/windows.txt") < 10 then fs.delete("os/files/windows.txt") Graphics.clearLayer(3) Graphics.UpdateScreen() else RedrawWindows() end
 end
 
 function createWindow(script)
@@ -73,7 +73,7 @@ file.close()
 Graphics.UpdateScreen()
 end
 
-local function editWindow(var,arg,id)
+function editWindow(var,arg,id)
 local Data = getWindowData(id)--script,id,name,x,y,w,h,{minimizable,fullscreen,visible}
 --allows changes of location, dimensions, and visibility
 if var == "name" then
@@ -90,13 +90,14 @@ elseif var == "fullscreen" then
     Data[8][2] = arg
 elseif var == "visible" then
     Data[8][3] = arg
+    bitmap.ToggleMap("window_"..id,arg)
 end
 local file = fs.open("os/files/windows.txt","r")
 local Lines = {}
 local line
 repeat
     line = file.readLine()
-    if line ~= nil then local Set = textutils.unserialize(line) local ID = Set[2] if ID ~= id then Lines[#Lines+1] = line else Lines[#Lines+1] = textutils.serialize(Data) end end
+    if line ~= nil then local Set = textutils.unserialize(line) local ID = Set[2] if ID ~= id then Lines[#Lines+1] = line else Lines[#Lines+1] = textutils.serialize(Data,{compact=true}) end end
 until line == nil
 file.close()
 file = fs.open("os/files/windows.txt","w")
@@ -104,6 +105,7 @@ for i = 1, #Lines do
     file.writeLine(Lines[i])
 end
 file.close()
+RedrawWindows()
 end
 
 function checkWindow(x,y,event)
@@ -113,16 +115,32 @@ for i = 1, #List do
     if fs.exists("os/files/windows.txt") and Found == false and string.sub(List[i],1,7) == "window_" then
         local Details = getWindowData(string.sub(List[i],8,string.len(List[i])-4))
         local button = bitmap.checkCollision(string.sub(List[i],1,string.len(List[i])-4),x,y)
-        if button[1] == "win_close" then Found = true deleteWin(Details[2]) end
-        if button[1] == "background" then Found = true end
-        if button[1] == "win_max" then Found = true editWindow("fullscreen",true,Details[2]) end
-        if button[1] == "win_min" then Found = true editWindow("visible",false,Details[2]) end
-        if button[1] == "win_size" then Found = true end
-        if button[1] == "win_dragbar" then end
-        if Found == false and button ~= nil then error(textutils.serialize(Details)) Found = true ProgramReader.execute(Details[1],"call","onInteract") end
+        if Details[8][3] == true then
+            if button[1] == "win_close" then Found = true deleteWin(Details[2]) end
+            if button[1] == "background" then Found = true end
+            if button[1] == "win_max" then Found = true editWindow("fullscreen",true,Details[2]) end
+            if button[1] == "win_min" then Found = true editWindow("visible",false,Details[2]) end
+            if button[1] == "win_size" then Found = true end
+            if button[1] == "win_dragbar" then end
+            if Found == false and button ~= nil then Found = true ProgramReader.execute(Details[1],"call","onInteract") end
+        end
     end
 end
 return Found
 end
+
+function getHidden()
+local List = {}
+local list = fs.list("os/files/bitmaps")
+local win
+if fs.exists("os/files/windows.txt") then
+    for i = 1, #list do
+        win = getWindowData(string.sub(list[i],8,string.len(list[i])-4))
+        if win[8][3] == false then List[#List + 1] = {win[3],win[2]} end
+    end
+end
+return List
+end
+
 
 function boot() fs.delete("os/files/windows.txt") end

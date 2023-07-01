@@ -1,6 +1,7 @@
 local Dir = "os/files/bitmaps"
 --bitmap settings: screenx,screeny,mapwidth,mapheight,active
 function createMap(Map,x,y,w,h)
+Log.record("bitmap","creating map '"..Map.."'")
 local Path = fs.combine(Dir,Map..".bit")
 local file = fs.open(Path,"w")
 file.writeLine(textutils.serialize({x,y,w,h,true},{compact=true}))
@@ -8,6 +9,7 @@ for i = 1, h do
     file.writeLine(string.rep("x",w))
 end
 file.close()
+Log.record("bitmap","map created")
 end
 
 local function ReadFile(id)
@@ -34,15 +36,29 @@ local settings = textutils.unserialise(Lines[1])
 local DI = {settings[1],settings[2],(settings[1]-1)+settings[3],(settings[2]-1)+settings[4]}
 if x>= DI[1] and x<= DI[3] and y>= DI[2] and y<= DI[4] then
     local h = settings[4]
+    local LX, LY = (x+1)-DI[1], (y+1)-DI[2]
+    Log.record("bitmap",Map.." local Position: "..LX..", "..LY)
     for i = h+2, #Lines do
         local Det = textutils.unserialise(Lines[i])
         local X1, Y1 = Det[4], Det[5]
         local X2, Y2 = Det[4]+(Det[6]-1),Det[5]+(Det[7]-1)
-        if (x>= X1 and x <= X2) and (y >= Y1 and y <= Y2) then Res = {Det[1],Det[2],Det[3]} end
+        if (LX>= X1 and LX <= X2) and (LY>= Y1 and LY <= Y2) then Res = {Det[1],Det[2],Det[3]} end
     end
     if Res[1] == nil then Res[1] = "background" end
 end
+Log.record("bitmap",Map.." collision Results: "..textutils.serialize(Res,{compact=true}))
 return Res
+end
+
+function ToggleMap(Map,visibility)
+local Lines = ReadFile(Map)
+local Settings = textutils.unserialise(Lines[1])
+Lines[1] = textutils.serialise({Settings[1],Settings[2],Settings[3],Settings[4],visibility},{compact=true})
+local file = fs.open(fs.combine(Dir,Map..".bit"),"w")
+for i = 1, #Lines do
+    file.writeLine(Lines[i])
+end
+file.close()
 end
 
 function addObject(Map,id,type,path,x,y,w,h)
@@ -62,6 +78,7 @@ for i = 1, #Lines do
     file.writeLine(Lines[i])
 end
 file.close()
+Log.record("bitmap","created Object "..id)
 end
 
 function editMap(map,x,y,w,h)
