@@ -98,6 +98,24 @@ end
 
 end
 
+function deleteObject(Map,id)
+local Lines = ReadFile(Map)
+local Settings = textutils.unserialize(Lines[1]))
+local Y = Settings[4]+2
+local Data = {}
+local N
+for i = Y, #Lines-Y do
+    Data = textutils.unserialize(Lines[i])
+    if Data[1] == id then N = i end
+end
+if N ~= nil then table.remove(Lines,N) end
+local File = fs.open("os/files/bitmaps/"..Map..".bit","w")
+for i = 1, #Lines do
+    File.writeLine(Lines[i])
+end
+File.close()
+end
+
 function clearMap(Map)
 local file = fs.open(fs.combine(Dir,Map..".bit"),"r")
 local Settings = textutils.unserialize(file.readLine())
