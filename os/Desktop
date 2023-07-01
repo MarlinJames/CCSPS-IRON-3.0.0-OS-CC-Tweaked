@@ -5,6 +5,7 @@ local DocumentsPath
 
 local Items = {}
 local DeskItems = {}
+local HiddenTabs = {}
 local Notifications = {}
 local Buttons = {}
 local Videos = 0
@@ -125,9 +126,13 @@ end
 end
  
 function CheckWindows(x,y)--need to update Window Interaction Variables
+Log.record("Desktop","mouse Event: "..x..", "..y)
 local I = 3
+local Found = false
 --need to replace check taskbar
-Found = Windows.checkWindow(x,y,"mouse_click")
+local KA = bitmap.checkCollision("taskbar",x,y)
+if #KA > 0 and KA[1] ~= "background" then Found = true Windows.editWindow("visible",true,KA[3]) end
+if Found == false and fs.exists("os/files/windows.txt") then Found = Windows.checkWindow(x,y,"mouse_click") drawTaskbar() end
 if Found == false and DesktopDraw == true then
     local RR = bitmap.checkCollision("desktop",x,y)
     if #RR > 0 and RR[1] ~= "background" then Windows.createWindow(RR[3]) end
@@ -169,7 +174,8 @@ function drawTaskbar()
 if FullScreen == false then
 Graphics.drawBox(1,h-1,w,1,4,"7")
 Graphics.drawBox(1,h,w,1,4,"8")
-local x = 3
+Graphics.drawBox(1,h-2,w,1,4,"x")
+local x = 2
 local Tabs = {}
 for i = 1, #Items do
    Graphics.drawBox(x, h -2, 2, 3,4, "0")
@@ -177,6 +183,21 @@ for i = 1, #Items do
     x = x + 5
 end
 local Found = false
+local Min = Windows.getHidden()
+local I
+if #Min ~= #HiddenTabs and #Min > 0 then
+bitmap.clearMap("taskbar")
+x = 2
+for i = 1, #Min/3 do
+    bitmap.addObject("taskbar","tab_"..i,"button",Min[i][2],x,1,3,3)
+end
+HiddenTabs = Min
+elseif #Min == 0 then
+HiddenTabs = {}
+end
+for i = 1, #HiddenTabs do
+    Graphics.drawBox(x,h-2,2,3,4,"0")
+end
 --need to replace section that displays miminized windows on task bar
 x = 3
 for i = 1, #Tabs do
@@ -221,7 +242,6 @@ end
 end
 
 function drawFrame()
-if Layers[4] == true then drawTaskbar() end
 if Layers[5] == true then if Popup[1] == true then DrawPopup() end end
 Graphics.UpdateScreen()
 end
@@ -234,9 +254,10 @@ Graphics.createLayer(4)
 Graphics.createLayer(5)
 bitmap.boot()
 bitmap.createMap("desktop",1,1,w,h)
+bitmap.createMap("taskbar",1,h-2,w,3)
 drawDesktop()
 drawShortcuts()
-
+drawTaskbar()
 end
 
 
