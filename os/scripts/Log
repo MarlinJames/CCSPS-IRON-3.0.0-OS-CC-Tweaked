@@ -1,0 +1,7 @@
+function record(a,b)
+local Path = "record.txt"
+local line = textutils.formatTime(os.time()).."|"..a.."| "..b
+local file = fs.open(Path,"a")
+file.writeLine(line)
+file.close()
+end
