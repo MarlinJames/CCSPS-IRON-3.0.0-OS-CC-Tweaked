@@ -247,7 +247,7 @@ for i = 1, #fs.list("os/files/layers") do
     local T = ("os/files/layers/Display_L"..i..".nfp")
     if fs.exists(T) then fs.delete(T) end
 end
-createLayer(1,"f")
+createLayer(1,"3")
 fs.delete("os/files/Display_M.nfp")
 fs.delete("os/files/Display_textM.txt")
 end

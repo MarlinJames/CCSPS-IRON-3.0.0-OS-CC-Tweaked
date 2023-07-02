@@ -186,8 +186,10 @@ local Found = false
 local Min = Windows.getHidden()
 local I
 if #Min ~= #HiddenTabs and #Min > 0 then
-bitmap.clearMap("taskbar")
 x = 2
+for i = 1, #HiddenTabs do
+    bitmap.deleteObject("taskbar",HiddenTabs[i][2])
+end
 for i = 1, #Min/3 do
     bitmap.addObject("taskbar","tab_"..i,"button",Min[i][2],x,1,3,3)
 end
